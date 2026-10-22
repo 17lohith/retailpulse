@@ -1,0 +1,122 @@
+{
+  "tenant": "demo-b",
+  "tenant_name": "GreenMart Supermarkets",
+  "kind": "3-store small chain",
+  "SIMULATED": true,
+  "seed": 42,
+  "real_stores_used": [
+    1,
+    2,
+    3
+  ],
+  "date_shift_days": 3290,
+  "real_window": [
+    "2015-08-12",
+    "2017-08-15"
+  ],
+  "visible_through": "2026-07-21",
+  "hidden_future_days": 28,
+  "products": 1200,
+  "currency": "INR",
+  "usd_to_inr_assumption": 33.0,
+  "family_reconciliation_ok": {
+    "demo-b-S1": {
+      "GROCERY I": true,
+      "GROCERY II": true,
+      "BEVERAGES": true,
+      "BREAD/BAKERY": true,
+      "DAIRY": true,
+      "FROZEN FOODS": true,
+      "PRODUCE": true,
+      "MEATS": true,
+      "POULTRY": true,
+      "SEAFOOD": true,
+      "EGGS": true,
+      "DELI": true,
+      "PREPARED FOODS": true,
+      "CLEANING": true,
+      "PERSONAL CARE": true,
+      "PET SUPPLIES": true
+    },
+    "demo-b-S2": {
+      "GROCERY I": true,
+      "GROCERY II": true,
+      "BEVERAGES": true,
+      "BREAD/BAKERY": true,
+      "DAIRY": true,
+      "FROZEN FOODS": true,
+      "PRODUCE": true,
+      "MEATS": true,
+      "POULTRY": true,
+      "SEAFOOD": true,
+      "EGGS": true,
+      "DELI": true,
+      "PREPARED FOODS": true,
+      "CLEANING": true,
+      "PERSONAL CARE": true,
+      "PET SUPPLIES": true
+    },
+    "demo-b-S3": {
+      "GROCERY I": true,
+      "GROCERY II": true,
+      "BEVERAGES": true,
+      "BREAD/BAKERY": true,
+      "DAIRY": true,
+      "FROZEN FOODS": true,
+      "PRODUCE": true,
+      "MEATS": true,
+      "POULTRY": true,
+      "SEAFOOD": true,
+      "EGGS": true,
+      "DELI": true,
+      "PREPARED FOODS": true,
+      "CLEANING": true,
+      "PERSONAL CARE": true,
+      "PET SUPPLIES": true
+    }
+  },
+  "per_store": {
+    "demo-b-S1": {
+      "real_store_nbr": 1,
+      "visible_batches": 139984,
+      "scale": 0.34747,
+      "mean_daily_units": 3499.961904761905,
+      "sku_days_stockout_share": 0.04812209390730915,
+      "lost_units_share": 0.03247576650008244,
+      "pos": 3260,
+      "batches": 139984,
+      "expiry_writeoff_units": 78984,
+      "shrink_events": 1089,
+      "closed_days": 4
+    },
+    "demo-b-S2": {
+      "real_store_nbr": 2,
+      "visible_batches": 143074,
+      "scale": 0.22737,
+      "mean_daily_units": 3500.0285714285715,
+      "sku_days_stockout_share": 0.0573094958968347,
+      "lost_units_share": 0.05503861776055474,
+      "pos": 3263,
+      "batches": 143074,
+      "expiry_writeoff_units": 73581,
+      "shrink_events": 1116,
+      "closed_days": 4
+    },
+    "demo-b-S3": {
+      "real_store_nbr": 3,
+      "visible_batches": 140735,
+      "scale": 0.09548,
+      "mean_daily_units": 3499.899319727891,
+      "sku_days_stockout_share": 0.05102455619667059,
+      "lost_units_share": 0.03543308923172139,
+      "pos": 3260,
+      "batches": 140735,
+      "expiry_writeoff_units": 75240,
+      "shrink_events": 1057,
+      "closed_days": 4
+    }
+  },
+  "sales_rows_visible": 1466603,
+  "sales_rows_future": 57169,
+  "runtime_s": 160.1
+}

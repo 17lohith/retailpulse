@@ -1,0 +1,42 @@
+{
+  "rows": 3000888,
+  "date_min": "2013-01-01 00:00:00",
+  "date_max": "2017-08-15 00:00:00",
+  "stores": 54,
+  "families": 33,
+  "days": 1684,
+  "zero_sales_share": 0.3129506999261552,
+  "negative_sales": 0,
+  "nulls": {
+    "id": 0,
+    "date": 0,
+    "store_nbr": 0,
+    "family": 0,
+    "sales": 0,
+    "onpromotion": 0
+  },
+  "onpromotion_share": 0.20371603338745065,
+  "sales_describe": {
+    "count": 3000888.0,
+    "mean": 357.77574911261877,
+    "std": 1101.997721338,
+    "min": 0.0,
+    "25%": 0.0,
+    "50%": 11.0,
+    "75%": 195.84725,
+    "max": 124717.0
+  },
+  "missing_calendar_days": [
+    "2013-12-25",
+    "2014-12-25",
+    "2015-12-25",
+    "2016-12-25"
+  ],
+  "duplicates_store_family_date": 0,
+  "other_files_rows": {
+    "stores.csv": 54,
+    "oil.csv": 1218,
+    "holidays_events.csv": 350,
+    "transactions.csv": 83488
+  }
+}

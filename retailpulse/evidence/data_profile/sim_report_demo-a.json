@@ -1,0 +1,58 @@
+{
+  "tenant": "demo-a",
+  "tenant_name": "Sri Lakshmi Provision Store",
+  "kind": "single-owner store",
+  "SIMULATED": true,
+  "seed": 42,
+  "real_stores_used": [
+    38
+  ],
+  "date_shift_days": 3290,
+  "real_window": [
+    "2015-08-12",
+    "2017-08-15"
+  ],
+  "visible_through": "2026-07-21",
+  "hidden_future_days": 28,
+  "products": 600,
+  "currency": "INR",
+  "usd_to_inr_assumption": 33.0,
+  "family_reconciliation_ok": {
+    "demo-a-S1": {
+      "GROCERY I": true,
+      "GROCERY II": true,
+      "BEVERAGES": true,
+      "BREAD/BAKERY": true,
+      "DAIRY": true,
+      "FROZEN FOODS": true,
+      "PRODUCE": true,
+      "MEATS": true,
+      "POULTRY": true,
+      "SEAFOOD": true,
+      "EGGS": true,
+      "DELI": true,
+      "PREPARED FOODS": true,
+      "CLEANING": true,
+      "PERSONAL CARE": true,
+      "PET SUPPLIES": true
+    }
+  },
+  "per_store": {
+    "demo-a-S1": {
+      "real_store_nbr": 38,
+      "visible_batches": 59779,
+      "scale": 0.09844,
+      "mean_daily_units": 1199.9360544217686,
+      "sku_days_stockout_share": 0.05046451634659158,
+      "lost_units_share": 0.0390791799563015,
+      "pos": 3259,
+      "batches": 59779,
+      "expiry_writeoff_units": 39102,
+      "shrink_events": 562,
+      "closed_days": 4
+    }
+  },
+  "sales_rows_visible": 228968,
+  "sales_rows_future": 9196,
+  "runtime_s": 39.2
+}

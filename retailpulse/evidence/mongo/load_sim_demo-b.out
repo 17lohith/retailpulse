@@ -1,0 +1,1 @@
+demo-b {'products': 1200, 'suppliers': 8, 'batches': 439903, 'purchase_orders': 10158, 'stock_adjustments': 59854, 'inventory_state': 3600, 'sales': 1466603, 'sim_future_sales': 57169, 'sim_truth': 1577367, 'seconds': 237}

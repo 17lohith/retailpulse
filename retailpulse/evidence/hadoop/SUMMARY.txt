@@ -1,0 +1,21 @@
+J1_token_frequency exit=0 elapsed=536s rows=57402
+HDFS: Number of bytes read=5974177887;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=46;Launched reduce tasks=4;Map input records=14318520;Reduce output records=57402;CPU time spent (ms)=2644780;Cleaning;
+J2_product_stats exit=0 elapsed=243s rows=603182
+HDFS: Number of bytes read=5974177887;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=46;Launched reduce tasks=4;Map input records=14318520;Reduce output records=603182;CPU time spent (ms)=783720;Cleaning;
+J6_verified_helpful exit=0 elapsed=190s rows=6
+HDFS: Number of bytes read=5974177887;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=46;Launched reduce tasks=1;Map input records=14318520;Reduce output records=6;CPU time spent (ms)=568020;Cleaning;
+J4_join_reviews_meta exit=0 elapsed=245s rows=603182
+HDFS: Number of bytes read=7356325952;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=56;Launched reduce tasks=4;Map input records=14921794;Reduce output records=603182;CPU time spent (ms)=637310;Join;
+J4b_priceband_category exit=0 elapsed=34s rows=701
+HDFS: Number of bytes read=43372669;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=4;Launched reduce tasks=1;Map input records=603182;Reduce output records=701;CPU time spent (ms)=30200;
+J5_brand_ranking exit=0 elapsed=32s rows=80350
+HDFS: Number of bytes read=43372669;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=4;Launched reduce tasks=1;Map input records=603182;Reduce output records=80350;CPU time spent (ms)=32740;
+J7_family_month exit=0 elapsed=36s rows=1848
+HDFS: Number of bytes read=121804691;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=3000889;Reduce output records=1848;CPU time spent (ms)=23480;
+J8_promo_lift exit=0 elapsed=35s rows=65
+HDFS: Number of bytes read=121804691;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=3000889;Reduce output records=65;CPU time spent (ms)=20740;
+J9_weekday_profile exit=0 elapsed=40s rows=609
+HDFS: Number of bytes read=121804691;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=3000889;Reduce output records=609;CPU time spent (ms)=41030;
+J10_waste_by_family exit=1 elapsed=41s rows=0
+Launched map tasks=11;CPU time spent (ms)=0;
+ALL_DONE

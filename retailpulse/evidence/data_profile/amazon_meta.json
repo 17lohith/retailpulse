@@ -1,0 +1,205 @@
+{
+  "rows": 603274,
+  "malformed": 0,
+  "field_present": {
+    "store": 585993,
+    "title": 603236,
+    "categories": 535076,
+    "details": 586344,
+    "main_category": 595314,
+    "price": 224319,
+    "features": 435850,
+    "description": 378051
+  },
+  "price_python_types": {
+    "NoneType": 378955,
+    "float": 224318,
+    "str": 1
+  },
+  "price_numeric_after_parse": 224318,
+  "price_describe": {
+    "count": 224318.0,
+    "mean": 25.709817981615387,
+    "std": 35.919623613389845,
+    "min": 0.0,
+    "10%": 7.26,
+    "50%": 17.99,
+    "90%": 49.9,
+    "99%": 136.51129999999858,
+    "max": 7904.16
+  },
+  "category_depth": {
+    "0": 68198,
+    "2": 19642,
+    "3": 55046,
+    "4": 226031,
+    "5": 209421,
+    "6": 24669,
+    "7": 267
+  },
+  "top_level2_categories": [
+    [
+      "Pantry Staples",
+      210135
+    ],
+    [
+      "Snacks & Sweets",
+      109105
+    ],
+    [
+      "Beverages",
+      95811
+    ],
+    [
+      "Breads & Bakery",
+      25033
+    ],
+    [
+      "Dairy, Eggs & Plant-Based Alternatives",
+      11951
+    ],
+    [
+      "Produce",
+      11777
+    ],
+    [
+      "Food & Beverage Gifts",
+      11444
+    ],
+    [
+      "Frozen",
+      9185
+    ],
+    [
+      "Meat & Seafood",
+      9179
+    ],
+    [
+      "Deli & Prepared Foods",
+      7048
+    ],
+    [
+      "Breakfast Foods",
+      6662
+    ],
+    [
+      "Fresh Flowers & Live Indoor Plants",
+      4273
+    ],
+    [
+      "Canned, Packaged & Baking",
+      3976
+    ],
+    [
+      "Breakfast Cereal",
+      3534
+    ],
+    [
+      "Alcoholic Beverages",
+      2682
+    ],
+    [
+      "Whole Foods Market - Pie toppings",
+      2486
+    ],
+    [
+      "Home Brewing & Winemaking",
+      1476
+    ],
+    [
+      "Candy & Chocolate",
+      977
+    ],
+    [
+      "Restaurant and Bulk Food Supply",
+      893
+    ],
+    [
+      "International Food Market",
+      847
+    ],
+    [
+      "Grocery Prime Day 2017",
+      640
+    ],
+    [
+      "Meat Substitutes",
+      629
+    ],
+    [
+      "Gluten-Free Groceries",
+      544
+    ],
+    [
+      "Plant-Based Lifestyles",
+      416
+    ],
+    [
+      "Fresh Meal Kits",
+      362
+    ]
+  ],
+  "distinct_stores": 80360,
+  "top_stores": [
+    [
+      "Generic",
+      5168
+    ],
+    [
+      "Whole Foods Market",
+      5069
+    ],
+    [
+      "365 by Whole Foods Market",
+      2667
+    ],
+    [
+      "McCormick",
+      1534
+    ],
+    [
+      "Bob's Red Mill",
+      1458
+    ],
+    [
+      "Unknown",
+      1400
+    ],
+    [
+      "HERSHEY'S",
+      1378
+    ],
+    [
+      "Nestle",
+      1281
+    ],
+    [
+      "Goya",
+      1238
+    ],
+    [
+      "TJ's",
+      1179
+    ],
+    [
+      "Produce",
+      1156
+    ],
+    [
+      "Wilton",
+      1110
+    ],
+    [
+      "MEAT",
+      1088
+    ],
+    [
+      "Black Tie Mercantile",
+      1054
+    ],
+    [
+      "Betty Crocker",
+      1041
+    ]
+  ]
+}

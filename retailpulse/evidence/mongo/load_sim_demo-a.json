@@ -1,0 +1,12 @@
+{
+ "products": 600,
+ "suppliers": 8,
+ "batches": 59779,
+ "purchase_orders": 3259,
+ "stock_adjustments": 10376,
+ "inventory_state": 600,
+ "sales": 228968,
+ "sim_future_sales": 9196,
+ "sim_truth": 246795,
+ "seconds": 29
+}
