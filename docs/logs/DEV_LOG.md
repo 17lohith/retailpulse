@@ -71,3 +71,8 @@
 - User asked whether owners upload Excel/PDF/real data and what "demo store"/"manual typing" mean. Clarified: v1 = Excel/CSV item-wise sales report exported from billing software (real data); PDF/OCR not supported (silent-corruption risk); demo store = simulated data for instant trial; manual entry = for shops without software.
 - Wrote plan/08_user_problems_and_mitigations.md (42 problems with fixes, "will not do" list, fixture-based test plan).
 - Unverified: real export layouts of Vyapar/Marg/GoFrugal/Tally. Open: U-1 (sample exports), U-3 below.
+
+## 2026-10-23 — Purchase/receiving/expiry workflow and feature parity
+- Fetched vendor pages (GoFrugal, Vyapar) for feature lists; Marg page fetch failed ("unable to verify the first certificate") — Marg covered from prior research only.
+- Wrote plan/09: stock-movement ledger model, 7 ways to capture expiry (receive-against-PO, purchase export upload, add-later, weekly sweep, opening-stock wizard, category estimate, future OCR), tracking policy per category, order-by-date logic, order lifecycle, problem/fix table, honest feature-parity matrix. Key engineering finding: POS sales lines lack batch → FEFO assumption + stock-count reconciliation.
+- Awaiting D-017 approval.
