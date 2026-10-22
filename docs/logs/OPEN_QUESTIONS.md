@@ -15,3 +15,4 @@
 | R-1…R-8 | Plan review items | Plan approval | User | ANSWERED 2026-10-23: R-1 yes; R-2 yes; R-3 2M sample; R-4 English only; R-5 Recharts (clean/professional); R-6 repo `retailpulse` on user's GitHub; R-7 yes; R-8 no change |
 | U-1 | Which billing-export layouts to mimic first (proposed Vyapar/Marg/generic)? Any real sample exports? | Realism of ingestion | User | OPEN |
 | U-2 | A real shop owner willing to pilot near the end? | Paper credibility | User | OPEN |
+| U-3 | If no real export samples: build the first 3 templates from public sample reports, labelled "unverified with real exports"? | Template realism | User | OPEN |

@@ -66,3 +66,8 @@
 - Hadoop auto-start: user systemd unit `~/.config/systemd/user/retailpulse-hadoop.service` (oneshot, calls `infra/stack.sh hadoop-start/stop`); tested stop → enable --now → 4 daemons up. (Linger not enabled: starts at login, as requested. Mongo container uses docker restart policy.)
 - Git: repo initialised at /home/allen/IA-3 (root holds docs/ and retailpulse/); local identity = GitHub noreply address; raw data, venv, secrets excluded via .gitignore. `gh` authenticated as allenjohn006.
 - **Waiting for the user's "build" command.** No application code has been written.
+
+## 2026-10-23 — User clarification Q&A: what the owner uploads
+- User asked whether owners upload Excel/PDF/real data and what "demo store"/"manual typing" mean. Clarified: v1 = Excel/CSV item-wise sales report exported from billing software (real data); PDF/OCR not supported (silent-corruption risk); demo store = simulated data for instant trial; manual entry = for shops without software.
+- Wrote plan/08_user_problems_and_mitigations.md (42 problems with fixes, "will not do" list, fixture-based test plan).
+- Unverified: real export layouts of Vyapar/Marg/GoFrugal/Tally. Open: U-1 (sample exports), U-3 below.
