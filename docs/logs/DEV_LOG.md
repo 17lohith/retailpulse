@@ -76,3 +76,6 @@
 - Fetched vendor pages (GoFrugal, Vyapar) for feature lists; Marg page fetch failed ("unable to verify the first certificate") — Marg covered from prior research only.
 - Wrote plan/09: stock-movement ledger model, 7 ways to capture expiry (receive-against-PO, purchase export upload, add-later, weekly sweep, opening-stock wizard, category estimate, future OCR), tracking policy per category, order-by-date logic, order lifecycle, problem/fix table, honest feature-parity matrix. Key engineering finding: POS sales lines lack batch → FEFO assumption + stock-count reconciliation.
 - Awaiting D-017 approval.
+
+## 2026-10-23 — Expiry simplified (D-018)
+- User proposed notify-and-ask design instead of inferring batch sales. Evaluated: sound (ground truth from owner, simple demo); risks = question fatigue, ignored prompts → mitigations: one-tap answers, daily cap, never blocking, "estimated" labels, stock-count override. Added plan/09 §10 addendum.

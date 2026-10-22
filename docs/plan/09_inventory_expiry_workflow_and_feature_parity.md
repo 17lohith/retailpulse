@@ -94,3 +94,22 @@ New collections/modules: `suppliers, purchase_orders, receipts, batches, stock_m
 
 ## 9. Decision requested (D-017)
 Approve the scope boundary: **"Inventory, Purchase & Expiry Intelligence System" (full parity in those areas) — billing/GST/accounting excluded, with a lite quick-sale entry for shops without billing software.** Alternative: add a basic counter-billing screen (no GST filing) as a Full Stack showcase — larger effort, recommended only after P0/P1 are done.
+
+---
+## 10. ADDENDUM 2026-10-23 — Simplified expiry (supersedes §3–§4 where they conflict; decision D-018)
+User decision: do **not** attempt batch-level depletion intelligence. RetailPulse **records batches, notifies, and asks the owner**; the owner's answers are the ground truth.
+
+**Batch lifecycle:** `Received → Active (estimate shown as "about N left") → Confirmed (owner states remaining) → Finished | Expired-unresolved → Resolved (sold / discarded / returned to supplier)`.
+
+**Prompts (all one-tap, never blocking):**
+| Trigger | Message | Answers |
+|---|---|---|
+| New batch received while older batch of the same item has stock | "About 18 left from the older batch (exp 12 Nov). Sell these first." | Noted · Finished · Still have N · Damaged/expired N |
+| Before a recommended reorder for an expiry-tracked item | "How many are left from the older batch?" | same |
+| Expiry within the category's alert window | "N units expire in D days. Sell first / mark down / return to supplier?" | Acknowledge · action chosen |
+| Expiry date passed, batch unresolved | "What happened to these N units?" | Sold · Discarded · Returned to supplier |
+| Stock count | counts override all estimates | — |
+
+**Rules:** estimates are labelled "about"/"estimated"; max questions per day capped and prioritised by ₹ value; ignored prompts never block ordering; unanswered batches keep an *unconfirmed* tag; every answer is stored (`batch_confirmations`) and used for (a) waste reporting, (b) checking forecast sell-through, (c) owner-responsiveness metrics.
+
+**Removed from v1:** automatic expiry-risk optimisation, expected-sales-before-expiry scoring, order-quantity caps by shelf life (kept only as a simple rule: "don't order more if unconfirmed older batch is within alert window").
