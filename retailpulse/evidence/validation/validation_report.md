@@ -1,6 +1,6 @@
 # Hadoop vs independent recomputation
 
-Generated 2026-10-22T20:43:19.946641+00:00 - runtime 212 s
+Generated 2026-10-22T21:29:43.327985+00:00 - runtime 125 s
 
 | Check | Keys (Hadoop) | Mismatches | Max abs diff | Status |
 |---|---|---|---|---|

@@ -25,3 +25,4 @@ Record every failed attempt, error message, and fix. Format: **Date · Area · S
 | 2026-10-23 | Frontend | Playwright could not find inputs by label | `<label>` not associated with its `<input>` (accessibility defect) | `htmlFor`/`id` pairs | 10 min | E2E tests double as accessibility checks |
 | 2026-10-23 | Tooling | `pkill -f "node src/server.js"` killed my own shell (pattern matched the command line) | | Start servers in separate commands, use `setsid` | 2 min | |
 | 2026-10-23 | Tests | Hadoop-timing evidence was taken while the laptop ran other jobs | | Kept as `contended_first_run/`, re-ran idle | — | State measurement conditions |
+| 2026-10-23 | Hadoop runner | Clean re-run: J10 failed in 1 s (`EXTRA_FILES` path empty) | `$RP` was defined only in `env.sh` sourced by `run_job.sh`, not in `run_all.sh` | `run_all.sh` now sources `env.sh`; J10 re-run alone | 3 min | Shell env does not cross script boundaries |

@@ -13,7 +13,7 @@ export const Trend = ({ data, x = 'date', y, name = 'Value', color = COLORS.prim
       <defs><linearGradient id={`g${y}`} x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor={color} stopOpacity={0.28} /><stop offset="95%" stopColor={color} stopOpacity={0} /></linearGradient></defs>
       <CartesianGrid stroke={COLORS.grid} vertical={false} />
       <XAxis dataKey={x} tickFormatter={xfmt} tick={axis} tickLine={false} axisLine={false} minTickGap={28} />
-      <YAxis tick={axis} tickLine={false} axisLine={false} width={46} tickFormatter={fmt} />
+      <YAxis tick={axis} tickLine={false} axisLine={false} width={62} tickFormatter={fmt} />
       <Tooltip content={<Tip fmt={fmt} labelFmt={xfmt} />} />
       <Area type="monotone" dataKey={y} name={name} stroke={color} strokeWidth={2.2} fill={`url(#g${y})`} dot={false} />
     </AreaChart>
@@ -25,7 +25,7 @@ export const Lines = ({ data, x, lines, h = 280, fmt = num, xfmt = (v) => v }) =
     <LineChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
       <CartesianGrid stroke={COLORS.grid} vertical={false} />
       <XAxis dataKey={x} tickFormatter={xfmt} tick={axis} tickLine={false} axisLine={false} minTickGap={32} />
-      <YAxis tick={axis} tickLine={false} axisLine={false} width={50} tickFormatter={fmt} />
+      <YAxis tick={axis} tickLine={false} axisLine={false} width={64} tickFormatter={fmt} />
       <Tooltip content={<Tip fmt={fmt} labelFmt={xfmt} />} /><Legend iconType="plainline" wrapperStyle={{ fontSize: 12 }} />
       {lines.map((l, i) => <Line key={l.key} type="monotone" dataKey={l.key} name={l.name || l.key} stroke={l.color || SERIES[i % SERIES.length]} strokeWidth={2} dot={false} />)}
     </LineChart>
@@ -33,23 +33,23 @@ export const Lines = ({ data, x, lines, h = 280, fmt = num, xfmt = (v) => v }) =
 );
 
 /** Horizontal ranked bars: [{label, value}] */
-export const RankBars = ({ data, value = 'value', label = 'label', color = COLORS.primary, fmt = num, h, colorBy }) => (
+export const RankBars = ({ data, value = 'value', label = 'label', color = COLORS.primary, fmt = num, h, colorBy, domain }) => (
   <ResponsiveContainer width="100%" height={h || Math.max(160, data.length * 30 + 20)}>
     <BarChart data={data} layout="vertical" margin={{ top: 0, right: 24, left: 0, bottom: 0 }}>
       <CartesianGrid stroke={COLORS.grid} horizontal={false} />
-      <XAxis type="number" tick={axis} tickLine={false} axisLine={false} tickFormatter={fmt} />
+      <XAxis type="number" tick={axis} tickLine={false} axisLine={false} tickFormatter={fmt} domain={domain || [0, 'auto']} allowDataOverflow />
       <YAxis type="category" dataKey={label} width={130} tick={{ ...axis, fill: '#334155' }} tickLine={false} axisLine={false} interval={0} />
       <Tooltip content={<Tip fmt={fmt} />} cursor={{ fill: '#f1f5f9' }} />
       <Bar dataKey={value} name="Value" radius={[0, 6, 6, 0]} barSize={18}>{data.map((d, i) => <Cell key={i} fill={colorBy ? colorBy(d) : color} />)}</Bar>
     </BarChart>
   </ResponsiveContainer>
 );
-export const Columns = ({ data, x, bars, h = 240, fmt = num, stacked }) => (
+export const Columns = ({ data, x, bars, h = 240, fmt = num, stacked, domain }) => (
   <ResponsiveContainer width="100%" height={h}>
     <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
       <CartesianGrid stroke={COLORS.grid} vertical={false} />
       <XAxis dataKey={x} tick={axis} tickLine={false} axisLine={false} interval={0} />
-      <YAxis tick={axis} tickLine={false} axisLine={false} width={46} tickFormatter={fmt} />
+      <YAxis tick={axis} tickLine={false} axisLine={false} width={56} tickFormatter={fmt} domain={domain || [0, 'auto']} allowDataOverflow />
       <Tooltip content={<Tip fmt={fmt} />} cursor={{ fill: '#f1f5f9' }} />{bars.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
       {bars.map((b, i) => <Bar key={b.key} dataKey={b.key} name={b.name || b.key} fill={b.color || SERIES[i]} radius={[6, 6, 0, 0]} stackId={stacked ? 's' : undefined} />)}
     </BarChart>

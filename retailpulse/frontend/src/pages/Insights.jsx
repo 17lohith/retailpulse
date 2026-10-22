@@ -33,8 +33,8 @@ function Feedback() {
         <Row className="g-3 mb-3">
           <Col lg={7}><Card title="Reviews per month"><div className="rp-takeaway">Review activity peaked in {x.monthly.reduce((a, b) => (b.reviews > a.reviews ? b : a)).month.slice(0, 4)}.</div>
             <Lines data={x.monthly} x="month" lines={[{ key: 'reviews', name: 'Reviews' }]} h={240} xfmt={(v) => (v.endsWith('-01') ? v.slice(0, 4) : '')} /></Card></Col>
-          <Col lg={5}><Card title="Do shoppers pay more for better-rated products?" sub="Average rating by price band (US$)">
-            <Columns data={x.priceBands.filter((b) => b.band !== 'no_price').map((b) => ({ band: b.band === '<5' ? 'under $5' : b.band, rating: b.meanRating }))} x="band" bars={[{ key: 'rating', name: 'Average rating', color: COLORS.primary }]} h={220} fmt={(v) => v.toFixed(2)} />
+          <Col lg={5}><Card title="Do pricier products get better ratings?" sub="Average rating by price band (US$) - axis starts at 3.5">
+            <Columns data={x.priceBands.filter((b) => b.band !== 'no_price').map((b) => ({ band: b.band === '<5' ? 'under $5' : b.band, rating: b.meanRating }))} x="band" bars={[{ key: 'rating', name: 'Average rating', color: COLORS.primary }]} h={220} fmt={(v) => v.toFixed(2)} domain={[3.5, 4.5]} />
             <Source>Price is known for only some products; others are left out of this chart.</Source></Card></Col>
         </Row>
         <Row className="g-3 mb-3">
@@ -51,7 +51,7 @@ function Feedback() {
         </Row>
         <Row className="g-3">
           <Col lg={6}><Card title="Brands with the most reviews"><RankBars data={x.topBrandsByReviews.map((b) => ({ label: b.brand.slice(0, 22), value: b.reviews }))} /></Card></Col>
-          <Col lg={6}><Card title="Best-rated brands" sub="Brands with at least 1,000 reviews"><RankBars data={x.bestRatedBrands.map((b) => ({ label: b.brand.slice(0, 22), value: Math.round(b.meanRating * 100) / 100 }))} color={COLORS.accent} fmt={(v) => v.toFixed(2)} /></Card></Col>
+          <Col lg={6}><Card title="Best-rated brands" sub="Brands with at least 1,000 reviews - axis starts at 4.0"><RankBars data={x.bestRatedBrands.map((b) => ({ label: b.brand.slice(0, 22), value: Math.round(b.meanRating * 100) / 100 }))} color={COLORS.accent} fmt={(v) => v.toFixed(2)} domain={[4, 5]} /></Card></Col>
         </Row>
         <Source>{x.source} Pipeline: {x.jobs.length} MapReduce jobs; slowest took {Math.max(...x.jobs.map((j) => j.elapsedSeconds || 0))} s on one laptop.</Source>
       </>)}</Async>

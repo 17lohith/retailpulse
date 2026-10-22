@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Runs jobs J1..J10 sequentially. Summary -> evidence/hadoop/SUMMARY.txt
-cd "$(dirname "$0")"; R=./run_job.sh; RAWREV=/retailpulse/raw/reviews/Grocery_and_Gourmet_Food.jsonl; META=/retailpulse/raw/meta/meta_Grocery_and_Gourmet_Food.jsonl
+cd "$(dirname "$0")"; source ./env.sh; R=./run_job.sh; RAWREV=/retailpulse/raw/reviews/Grocery_and_Gourmet_Food.jsonl; META=/retailpulse/raw/meta/meta_Grocery_and_Gourmet_Food.jsonl
 S=/home/allen/IA-3/retailpulse/evidence/hadoop/SUMMARY.txt; : > $S
 run() { "$R" "$@" 2>&1 | head -2 | tee -a $S; }
 run J1_token_frequency $RAWREV j1_mapper.py sum_reducer_min.py sum_reducer.py -D mapreduce.job.reduces=4
 run J2_product_stats $RAWREV j2_mapper.py j2_reducer.py sum_reducer.py -D mapreduce.job.reduces=4
+run J3_monthly_volume $RAWREV j3_mapper.py sum_reducer.py sum_reducer.py
 run J6_verified_helpful $RAWREV j6_mapper.py sum_reducer.py sum_reducer.py
 run J4_join_reviews_meta "$RAWREV $META" j4_mapper.py j4_reducer.py - -D mapreduce.job.reduces=4
 run J4b_priceband_category /retailpulse/out/J4_join_reviews_meta j4b_mapper.py sum_reducer.py sum_reducer.py

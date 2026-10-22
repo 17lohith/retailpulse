@@ -1,20 +1,20 @@
-[  166s] independent pass over reviews done: products=603182 tokens=677350
-[  167s] J1 token frequency (bucket|token >= 50): PASS (keys 57402, mismatches 0, max diff 0)
-[  176s] J2 per-product count/rating-sum/verified/helpful/histogram: PASS (keys 603182, mismatches 0, max diff 1)
-[  176s] J3 monthly review volume: PASS (keys 263, mismatches 0, max diff 0)
-[  176s] J6 verified / length-bucket helpfulness: PASS (keys 6, mismatches 0, max diff 0)
-[  200s] J4 reduce-side join (per-product reviews, rating sum): PASS (keys 603182, mismatches 0, max diff 0)
-[  202s] J4b price band x category: PASS (keys 701, mismatches 0, max diff 0)
-[  202s] J5 brand ranking: PASS (keys 80350, mismatches 0, max diff 0)
-[  208s] J7 sales by family x month (pandas): PASS (keys 1848, mismatches 0, max diff 5.00004e-07)
-[  210s] J8 promo vs non-promo (pandas): PASS (keys 65, mismatches 0, max diff 5.0012e-07)
+[   94s] independent pass over reviews done: products=603182 tokens=677350
+[   94s] J1 token frequency (bucket|token >= 50): PASS (keys 57402, mismatches 0, max diff 0)
+[  101s] J2 per-product count/rating-sum/verified/helpful/histogram: PASS (keys 603182, mismatches 0, max diff 1)
+[  102s] J3 monthly review volume: PASS (keys 263, mismatches 0, max diff 0)
+[  102s] J6 verified / length-bucket helpfulness: PASS (keys 6, mismatches 0, max diff 0)
+[  119s] J4 reduce-side join (per-product reviews, rating sum): PASS (keys 603182, mismatches 0, max diff 0)
+[  120s] J4b price band x category: PASS (keys 701, mismatches 0, max diff 0)
+[  120s] J5 brand ranking: PASS (keys 80350, mismatches 0, max diff 0)
+[  123s] J7 sales by family x month (pandas): PASS (keys 1848, mismatches 0, max diff 5.00004e-07)
+[  124s] J8 promo vs non-promo (pandas): PASS (keys 65, mismatches 0, max diff 5.0012e-07)
 /home/allen/IA-3/retailpulse/validation/validate_jobs.py:123: Pandas4Warning: Series.dt.weekday is deprecated and will be removed in a future version. Use Series.dt.day_of_week instead.
   ss["dow"] = ss.date.dt.weekday
-[  211s] J9 weekday profile (pandas): PASS (keys 609, mismatches 0, max diff 1.30013e-06)
-[  212s] J10 waste by family (map-side join) vs pandas: PASS (keys 115, mismatches 0, max diff 0)
+[  125s] J9 weekday profile (pandas): PASS (keys 609, mismatches 0, max diff 1.30013e-06)
+[  125s] J10 waste by family (map-side join) vs pandas: PASS (keys 115, mismatches 0, max diff 0)
 # Hadoop vs independent recomputation
 
-Generated 2026-10-22T20:43:19.946641+00:00 - runtime 212 s
+Generated 2026-10-22T21:29:43.327985+00:00 - runtime 125 s
 
 | Check | Keys (Hadoop) | Mismatches | Max abs diff | Status |
 |---|---|---|---|---|

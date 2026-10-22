@@ -1,0 +1,12 @@
+[0.2s] registered tenant t-4b036fd45d
+[0.3s] products: uploaded 0.1 MB, status=mapping_suggested, detected=name:Item Name, itemCode:Item Code, barcode:Barcode, category:Category, brand:Brand, mrp:MRP, cost:Cost Price, pack:Pack Size
+[1.1s] products: preview rows=600 ok=600 rejected=0 skipped=0 unmatched=0 reconciles=true matched(code=0,name=0)
+[4.7s] products: committed {"inserted":600,"updated":0,"productsCreated":600,"skippedUnmatched":0,"rows":600,"committedAt":"2026-10-22T21:30:21.236Z"}
+[5.5s] sales: uploaded 20.6 MB, status=mapping_suggested, detected=date:Date, item:Item Name, qty:Quantity, amount:Sale Amount, itemCode:Item Code, category:Category
+[9.3s] sales: preview rows=228968 ok=228968 rejected=0 skipped=0 unmatched=0 reconciles=true matched(code=228968,name=0)
+[47.8s] sales: committed {"inserted":228968,"updated":0,"productsCreated":0,"skippedUnmatched":0,"rows":228968,"committedAt":"2026-10-22T21:31:04.300Z"}
+[47.9s] stock: uploaded 0.0 MB, status=mapping_suggested, detected=item:Item Name, qty:Closing Stock, itemCode:Item Code
+[48.6s] stock: preview rows=600 ok=600 rejected=0 skipped=0 unmatched=0 reconciles=true matched(code=600,name=0)
+[55.0s] stock: committed {"inserted":0,"updated":600,"productsCreated":0,"skippedUnmatched":0,"rows":600,"committedAt":"2026-10-22T21:31:11.408Z"}
+[55.0s] learning jobs queued: 2 (queued,queued)
+{"email":"e2e-1792704616643@test.local","token":"eyJhbGciOiJI...","salesImport":{"rowsTotal":228968,"rowsOk":228968,"reconciles":true,"inserted":228968}}

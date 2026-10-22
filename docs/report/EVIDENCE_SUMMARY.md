@@ -25,20 +25,20 @@ Date shift +3,290 days (470 whole weeks: weekdays preserved). Last 28 days hidde
 
 ## 3. Hadoop MapReduce (Big Data rubric) — `evidence/hadoop/`, `evidence/validation/`
 Hadoop 3.4.3 single node, HDFS + YARN, Hadoop Streaming with Python mappers/reducers.
-| Job | Input | Output rows | Elapsed (first run, machine busy)* |
-|---|---|---|---|
-| J1 token frequency by sentiment | 14.3 M reviews | 57,402 (count ≥ 50) | 536 s |
-| J2 per-product stats | 14.3 M reviews | 603,182 | 243 s |
-| J3 monthly volume | 14.3 M reviews | 263 | 217 s |
-| J4 reduce-side **join** reviews × metadata | 14.9 M records | 603,182 | 245 s |
-| J4b price band × category (chained) | J4 output | 701 | 34 s |
-| J5 brand ranking (chained) | J4 output | 80,350 | 32 s |
-| J6 verified / helpful votes | 14.3 M reviews | 6 | 190 s |
-| J7 family × month | 3.0 M sales rows | 1,848 | 36 s |
-| J8 promo vs no promo | 3.0 M | 65 | 35 s |
-| J9 weekday profile | 3.0 M | 609 | 40 s |
-| J10 waste by family (**map-side join**, distributed cache) | 67.8 k adjustments | 115 | 26 s |
-\*A clean re-run on an idle machine is in `evidence/hadoop/SUMMARY.txt`; the busy-machine run is kept in `evidence/hadoop/contended_first_run/` for transparency.
+| Job | Input | Output rows | Idle laptop (s) | First run, busy (s) |
+|---|---|---|---|---|
+| J1 token frequency by sentiment | 14.3 M reviews | 57,402 (count ≥ 50) | 270 | 536 |
+| J2 per-product stats | 14.3 M reviews | 603,182 | 138 | 243 |
+| J3 monthly volume | 14.3 M reviews | 263 | 117 | 217 |
+| J4 reduce-side **join** reviews × metadata | 14.9 M records | 603,182 | 128 | 245 |
+| J4b price band × category (chained) | J4 output | 701 | 22 | 34 |
+| J5 brand ranking (chained) | J4 output | 80,350 | 23 | 32 |
+| J6 verified / helpful votes | 14.3 M reviews | 6 | 107 | 190 |
+| J7 family × month | 3.0 M sales rows | 1,848 | 28 | 36 |
+| J8 promo vs no promo | 3.0 M | 65 | 25 | 35 |
+| J9 weekday profile | 3.0 M | 609 | 28 | 40 |
+| J10 waste by family (**map-side join**, distributed cache) | 67.8 k adjustments | 115 | 21 | 26 |
+The idle-laptop run (`evidence/hadoop/SUMMARY.txt`, 12 vcores, 14 GB RAM, one node) processes all 14.3 M reviews and 3.0 M sales rows in about 15 minutes in total; the first run, taken while other work was using the CPU, is kept in `evidence/hadoop/contended_first_run/` for transparency. J1–J10 plus the chained J4b = 11 job runs.
 
 **Independent validation** (`validation/validate_jobs.py`, plain Python/pandas, 12 processes over byte ranges): **12 of 12 checks PASS, 0 mismatches** (J1 57,402 keys; J2 603,182 products incl. histograms; J3 263 months; J4 join 603,182; J4b 701; J5 80,350 brands; J6; J7 1,848; J8 65; J9 609; J10 115). J2 comparison tolerance 1e-3 relative because Hadoop wrote the mean with 4 decimals.
 **Sample representativeness** (`evidence/validation/review_sample_representativeness.json`): MongoDB holds **2,002,550** reviews (14.0 %); star-rating shares differ from the full 14,318,519 by at most 0.049 percentage points.

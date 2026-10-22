@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Load Hadoop job outputs (data/clean/mr/*.tsv) and job metadata (evidence/hadoop/*.log) into MongoDB."""
-import json, re, sys, glob, pathlib, datetime as dt
+import json, re, sys, glob, os, pathlib, datetime as dt
 from mongo_common import db, bulk, ROOT
 D = db(); MR = ROOT / "data/clean/mr"; now = dt.datetime.utcnow()
 
@@ -47,5 +47,5 @@ for f in sorted(glob.glob(str(ROOT / "evidence/hadoop/J*.log"))):
     D.mr_jobs.insert_one({"job": name, "exitCode": int(ex.group(1)) if ex else None, "elapsedSeconds": int(ex.group(2)) if ex else None,
         "mapInputRecords": g(r"Map input records=(\d+)"), "reduceOutputRecords": g(r"Reduce output records=(\d+)"), "launchedMaps": g(r"Launched map tasks=(\d+)"),
         "launchedReduces": g(r"Launched reduce tasks=(\d+)"), "hdfsBytesRead": g(r"HDFS: Number of bytes read=(\d+)"), "cpuMs": g(r"CPU time spent \(ms\)=(\d+)"),
-        "counters": counters, "ranAt": now})
+        "counters": counters, "ranAt": now, "elapsedSecondsFirstRunBusy": (lambda f: int(re.search(r"elapsed_s=(\d+)", open(f).read()).group(1)) if os.path.exists(f) and re.search(r"elapsed_s=(\d+)", open(f).read()) else None)(str(ROOT / "evidence/hadoop/contended_first_run" / (name + ".log")))})
 json.dump(out, open(ROOT / "evidence/mongo/load_mr_results.json", "w"), indent=1); print(out)
