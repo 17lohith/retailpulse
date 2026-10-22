@@ -1,0 +1,24 @@
+{
+  "tenantId": "t-cb87f33c87",
+  "runId": "f541461dd322",
+  "asOf": "2026-07-21",
+  "createdAt": "2026-10-22 21:09:05.127571",
+  "seconds": 22.8,
+  "simulated": false,
+  "series": 561,
+  "recommendations": 179,
+  "modelCounts": {
+    "ma28": 81,
+    "seasonal_avg4": 62,
+    "gbm": 370,
+    "croston_sba": 48
+  },
+  "horizonDays": 28,
+  "honestScore": {
+    "window": "last 28 days, selection made on the preceding 28 days",
+    "wapeSelected": 0.5776667936969396,
+    "wapeBaselineSeasonalAvg4": 0.6038382649421692,
+    "coverage80": 0.8367446393762183
+  },
+  "note": ""
+}

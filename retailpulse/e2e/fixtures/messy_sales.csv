@@ -1,0 +1,14 @@
+My Store - Item wise sales report
+Printed on 05/09/2026
+
+Date,Item Name,Qty,Amount
+01/09/2026,Amul Taaza Milk 500 ml,24,"Rs. 720"
+01/09/2026,Parle-G Biscuits 200 g,12,"Rs. 240"
+02/09/2026,Amul Taaza Milk 500 ml,"1,000","Rs. 30,000"
+31/02/2026,Parle-G Biscuits 200 g,5,100
+03/09/2026,Tata Salt 1 kg,-2,-56
+03/09/2026,Tata Salt 1 kg,0,0
+04/09/2026,Mystery Biscuit XL,7,70
+05/09/2026,Amul Taaza Milk 500 ml,abc,10
+,Parle-G Biscuits 200 g,3,60
+Total,,1049,31034

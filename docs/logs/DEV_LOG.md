@@ -79,3 +79,17 @@
 
 ## 2026-10-23 — Expiry simplified (D-018)
 - User proposed notify-and-ask design instead of inferring batch sales. Evaluated: sound (ground truth from owner, simple demo); risks = question fatigue, ignored prompts → mitigations: one-tap answers, daily cap, never blocking, "estimated" labels, stock-count override. Added plan/09 §10 addendum.
+
+## 2026-10-23 — BUILD DAY 1: data → Hadoop → Mongo → engine → API → UI → Docker/CI (user said "build it")
+Executed docs/plan/10_implementation_plan.md. Order and key facts (details & numbers: docs/report/EVIDENCE_SUMMARY.md):
+1. **Stage 1 data prep** – `data_prep/profile_sources.py` profiled all 4 sources → `evidence/data_profile/`. Findings: 1 rating of 0.0, 1 string price, 62.8 % missing prices, 4 missing 25-Dec days, comma inside a quoted family name.
+2. **Stage 2 simulator** – `simulation/{catalog,generate,make_exports}.py`. Demand = real Favorita family totals split by multinomial (reconciles exactly), supply/batches/expiry/shrink simulated with an owner-style reorder policy. Found & fixed my own bug: batch `remaining` reflected the END of the simulation, not the as-of date, and future orders/deliveries leaked into visible data → snapshot at as-of day; test added (`test_no_future_data_leaks_into_visible_sales`). Regenerated both tenants.
+3. **Stage 3 Hadoop** – 10 Streaming jobs (`hadoop/streaming/`), `run_job.sh`/`run_all.sh`, YARN tuned (9 GB, 12 vcores). First full run on the busy laptop: J1 536 s, J2 243 s, J3 217 s, J4 245 s… A clean re-run was started afterwards for benchmark-quality timings (see evidence/hadoop/SUMMARY.txt vs contended_first_run/).
+4. **Stage 4 Mongo** – replica set (single node) + loaders; 603,274 products, 2,002,550-review sample, MR results, both demo tenants. Container needed `--ulimit nofile` (crash found during tests).
+5. **Stage 5 validation** – independent recomputation: 12/12 PASS, 0 mismatches. Sample is representative (max 0.049 pp).
+6. **Stage 6 engine** – `engine/pipeline.py` (4 models, selection on window V, honest score on window T, intervals, reorder logic with reasons, inventory insights) + `worker.py` (Mongo job queue, leases, retries) + `favorita_eval.py` (real-data benchmark: GBM 14.2 % vs best baseline 16.6 % WAPE; per-series selector did not beat GBM).
+7. **Stage 7 backend** – Express API (auth+lockout, roles, tenant isolation, catalog, sales analytics, inventory/batches/prompts (D-018), purchasing (approve/edit/skip → PO → receive), Today, insights from Hadoop results, import pipeline with GridFS raw storage, undo, audit, data export/delete). 45 tests. Tests caught the strictQuery data-loss bug.
+8. **Stage 8 frontend** – React/Vite/Bootstrap/Recharts; 11 pages; mobile-first; Playwright shots (0 console errors, no overflow at 390 px) and wizard flow; accessibility fix (labels).
+9. **Stage 9 Docker/CI/cloud code** – 3 Dockerfiles + compose (verified healthy), nginx API upstream templated for Cloud Run, CI (4 jobs) + inactive deploy workflow, Cloud Run function + tests, 5 BigQuery SQL files, DuckDB local stand-in whose baselines match Python to 1e-15, Looker spec, teammate runbook.
+10. **End-to-end** – new-owner journey through the real API: 228,968-row upload, 100 % matched, learning job, Today screen.
+- Pending: reports/PPT (user will request), cloud execution (teammate), real shop export samples (U-1), final quiet-machine timing table.

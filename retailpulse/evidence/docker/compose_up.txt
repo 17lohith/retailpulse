@@ -1,0 +1,13 @@
+# docker compose up verification 2026-10-23T02:23:22+05:30
+NAME              IMAGE           STATUS
+rp-ci-backend-1   rp-ci-backend   Up 17 seconds (healthy)
+rp-ci-mongo-1     mongo:7.0       Up 25 seconds (healthy)
+rp-ci-web-1       rp-ci-web       Up 16 seconds (healthy)
+rp-ci-worker-1    rp-ci-worker    Up 17 seconds
+
+GET /health via nginx (web container):
+{"status":"ok","db":"up","time":"2026-10-22T20:53:23.482Z"}
+images:
+rp-ci-web:latest 75.6MB
+rp-ci-worker:latest 767MB
+rp-ci-backend:latest 341MB

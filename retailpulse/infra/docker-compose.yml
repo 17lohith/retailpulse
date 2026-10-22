@@ -1,0 +1,38 @@
+# RetailPulse - full stack: MongoDB (single-node replica set), API, learning worker, web UI.
+#   docker compose -f infra/docker-compose.yml up --build
+# Hadoop is a separate batch tier (see hadoop/); it is not required to run the app.
+name: retailpulse
+services:
+  mongo:
+    image: mongo:7.0                     # NOT 8.x: MongoDB 8 refuses to start on Linux kernels 6.19 - 7.0.13 (see docs/logs/TRIAL_ERROR.md)
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all", "--wiredTigerCacheSizeGB", "2"]
+    ulimits: { nofile: { soft: 64000, hard: 64000 } }
+    ports: ["127.0.0.1:${MONGO_PORT:-27017}:27017"]
+    volumes: ["mongo-data:/data/db"]
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval \"try{rs.status().ok}catch(e){rs.initiate({_id:'rs0',members:[{_id:0,host:'mongo:27017'}]}).ok}\" | grep -q 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 20
+  backend:
+    build: ../backend
+    environment:
+      MONGO_URI: mongodb://mongo:27017/?replicaSet=rs0
+      MONGO_DB: ${MONGO_DB:-retailpulse}
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in infra/.env}
+      CORS_ORIGIN: http://localhost:${WEB_PORT:-8080}
+    depends_on: { mongo: { condition: service_healthy } }
+    ports: ["127.0.0.1:${API_PORT:-4000}:4000"]
+  worker:
+    build: ../engine
+    environment:
+      MONGO_URI: mongodb://mongo:27017/?replicaSet=rs0
+      MONGO_DB: ${MONGO_DB:-retailpulse}
+    depends_on: { mongo: { condition: service_healthy } }
+    restart: unless-stopped
+  web:
+    build: ../frontend
+    depends_on: [backend]
+    ports: ["${WEB_PORT:-8080}:80"]
+volumes:
+  mongo-data:

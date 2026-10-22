@@ -1,0 +1,10 @@
+# syntax=docker/dockerfile:1
+FROM python:3.12-slim
+ENV PYTHONUNBUFFERED=1 PIP_NO_CACHE_DIR=1
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt && useradd -m rp
+COPY *.py ./
+USER rp
+# polls MongoDB for queued learning jobs (no Redis/queue server needed)
+CMD ["python", "worker.py"]

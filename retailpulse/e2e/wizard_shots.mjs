@@ -1,0 +1,11 @@
+import { chromium } from 'playwright'; import fs from 'node:fs';
+const BASE = process.env.BASE || 'http://localhost:5173'; const OUT = new URL('../evidence/screenshots/', import.meta.url).pathname; const F = new URL('./fixtures/messy_sales.csv', import.meta.url).pathname;
+const b = await chromium.launch(); const page = await (await b.newContext({ viewport: { width: 1280, height: 900 } })).newPage(); const errs = []; page.on('console', (m) => m.type() === 'error' && errs.push(m.text()));
+await page.goto(BASE + '/register'); await page.getByLabel(/Shop name/i).fill('Wizard Test Mart'); await page.locator('input').nth(1).fill('Asha'); await page.locator('input[type=email]').fill(`wiz${Date.now()}@test.local`); await page.locator('input[type=password]').fill('Passw0rd!x');
+await page.getByRole('button', { name: 'Create account' }).click(); await page.waitForURL(BASE + '/'); await page.screenshot({ path: OUT + 'new-shop-today-empty.png', fullPage: true });
+await page.goto(BASE + '/import'); await page.waitForTimeout(800); await page.screenshot({ path: OUT + 'wizard-1-choose.png', fullPage: true });
+await page.getByText('My sales from billing software').click(); await page.waitForTimeout(400); await page.screenshot({ path: OUT + 'wizard-2-upload.png', fullPage: true });
+await page.setInputFiles('input[type=file]', F); await page.waitForSelector('text=Which column is which?'); await page.waitForTimeout(500); await page.screenshot({ path: OUT + 'wizard-3-mapping.png', fullPage: true });
+await page.getByLabel(/Add items I don't have yet automatically/).check(); await page.getByRole('button', { name: /Check my file/ }).click(); await page.waitForSelector('text=Cannot use'); await page.waitForTimeout(500); await page.screenshot({ path: OUT + 'wizard-4-preview.png', fullPage: true });
+await page.getByRole('button', { name: /^Import \d+/ }).click(); await page.waitForSelector('text=Import complete', { timeout: 30000 }); await page.screenshot({ path: OUT + 'wizard-5-done.png', fullPage: true });
+await b.close(); console.log(JSON.stringify({ consoleErrors: errs }));

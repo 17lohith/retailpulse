@@ -1,36 +1,32 @@
-# 04 — Rubric Traceability Matrix
+# 04 — Rubric Traceability Matrix (updated 2026-10-23)
 
-Live checklist. Update **Status** and **Evidence** as work happens. Statuses: `NOT STARTED` / `IN PROGRESS` / `DONE` / `BLOCKED`.
+Status: `DONE` (built + evidence) · `DONE-LOCAL` (built and tested locally; cloud execution pending) · `PENDING-CLOUD` · `OUT` (handled by user). Evidence paths are relative to `retailpulse/`.
 
-## Full Stack Development (23DC2032) — 30 project + 10 cert
-| Criterion (5 ea.) | Planned implementation | Evidence to capture | Status |
+## Full Stack Development (23DC2032) — 30 project (+10 cert: user)
+| Criterion | Implementation | Evidence | Status |
 |---|---|---|---|
-| Front-end design | React + Bootstrap, responsive dashboard | Screenshots desktop/mobile, component list | NOT STARTED |
-| Back-end integration | Node/Express + MongoDB, validation | API table, Postman/curl logs, Mongo screenshots | NOT STARTED |
-| Functionality | CRUD, import, analytics, forecast, recommendations | Demo recording, test cases | NOT STARTED |
-| Presentation | Demo script (Report 2 §9.1) | Rehearsal notes | NOT STARTED |
-| Innovation | Explainable reorder, data-quality view | Feature write-up | NOT STARTED |
-| Documentation | Report, API list, data model | `report/` | NOT STARTED |
-| Certification (10) | MongoDB/full-stack course (**link unconfirmed**) | Certificate | NOT STARTED |
+| Front-end design | React 18 + Vite + Bootstrap 5 + Recharts; 11 responsive pages, accessible labels, takeaway-titled charts | `evidence/screenshots/*.png` (22 + wizard), report.json: 0 console errors, no phone overflow | DONE |
+| Back-end integration | Node 22 / Express / Mongoose / MongoDB 7 replica set; JWT + roles + tenant isolation; GridFS; Python worker via Mongo job queue | `backend/`, `evidence/tests/backend_jest_verbose.txt` (45 tests) | DONE |
+| Functionality | CRUD (products, suppliers), CSV/XLSX import wizard with undo, quick sale entry, reorder→PO→receive, batch questions, stock counts, dashboards, forecasts, insights | `e2e/ingest_flow.mjs` run; tests | DONE |
+| Presentation | Demo script below; demo shops with one-click login | `docs/report/DEMO_SCRIPTS.md` (to write with reports) | READY |
+| Innovation | Explainable reorder reasons, honest forecast scoring, owner-confirmed batches (D-018), data-quality page, automatic learning after import | EVIDENCE_SUMMARY §5–6 | DONE |
+| Documentation | docs/ tree, API in code, decisions & trial/error logs | `docs/` | DONE (reports pending) |
 
-## Big Data Tools & Techniques (23DC2044) — 30 project + 10 cert
-| Criterion | Planned implementation | Evidence | Status |
+## Big Data Tools & Techniques (23DC2044) — 30 project (+10 cert: user)
+| Criterion | Implementation | Evidence | Status |
 |---|---|---|---|
-| Dataset & MapReduce (10) | Amazon Fine Food Reviews (568,454 rows, verify after download) + Hadoop Streaming jobs | Kaggle link, count, data dictionary, cleaning log, job logs | NOT STARTED |
-| NoSQL integration (5) | Mongo bulk insert/query/update/delete + `mr_results` | Shell/PyMongo transcripts | NOT STARTED |
-| Result (10) | Validation vs pandas & Mongo aggregation, insights + limits | Comparison table | NOT STARTED |
-| Report (5) + PPT 7–10 slides | Per Report 2 §10 | `report/` | NOT STARTED |
-| Certification (10) | MongoDB skills course | Certificate | NOT STARTED |
-| Hadoop MapReduce | Confirmed by user 2026-10-22 (D-008) | — | UNBLOCKED |
+| Dataset & MapReduce (10) | Amazon Reviews 2023 grocery (14.3 M reviews, 603 K products) + Store Sales (3.0 M rows); **10 Hadoop MapReduce jobs** (incl. reduce-side join, map-side join, chained jobs, combiners, counters as cleaning log) | `evidence/hadoop/`, `hadoop/streaming/`, `data/clean/mr/` | DONE |
+| NoSQL integration (5) | MongoDB: bulk insert 603 K + 2.0 M + results; indexes; CRUD via API; GridFS; replica set | `evidence/mongo/*.json`, backend tests | DONE |
+| Result (10) | Independent recomputation 12/12 PASS; sample representativeness; insights (words, price bands, brands, promo, weekday) shown in UI | `evidence/validation/` | DONE |
+| Report (5) + PPT 7–10 slides | Outline + all numbers ready | `docs/report/EVIDENCE_SUMMARY.md` | PENDING (user asks) |
 
-## Cloud Computing for Data Analytics (23DC2043) — 25 project + 15 cert
-| Criterion | Planned implementation | Evidence | Status |
+## Cloud Computing for Data Analytics (23DC2043) — 25 project (+15 cert: user)
+| Criterion | Implementation | Evidence | Status |
 |---|---|---|---|
-| Problem/dataset/cloud viz (5) | Food-retail demand; Store Sales in GCS; Looker Studio | Bucket screenshot, dashboard link | NOT STARTED |
-| Architecture & pipeline (10) | Event-triggered Cloud Run fn → ETL → BigQuery; Docker; GitHub Actions CI/CD | Trigger logs, Dockerfile, workflow run | NOT STARTED |
-| Managed ML results (5) | BQML ARIMA_PLUS vs baseline, holdout metrics | `ML.EVALUATE` output, charts | NOT STARTED |
-| Report (5) | <10% plagiarism, cited, figures | `report/` | NOT STARTED |
-| Certification (15) | Course/link **unconfirmed** | Certificate | NOT STARTED |
+| Problem / dataset / cloud visualisation (5) | Food-retail demand; Store Sales; Looker Studio spec + views | `cloud/looker_studio_spec.md` | DONE-LOCAL / PENDING-CLOUD |
+| Architecture & pipeline (10) | **Docker** ✔ (3 images + compose verified) · **CI** workflow ✔ (4 jobs) · **serverless function + ETL** ✔ code + 6 tests · CD workflow (inactive) · bucket/trigger/BigQuery load ✘ needs account | `evidence/docker/compose_up.txt`, `.github/workflows/`, `cloud/functions/` | DONE-LOCAL / PENDING-CLOUD |
+| Managed ML results (5) | BQML ARIMA_PLUS SQL written; local models + baselines produce target numbers (GBM 0.142, baseline 0.166 WAPE) | `cloud/sql/`, `evidence/forecast/` | PENDING-CLOUD |
+| Report (5) | Runbook + evidence checklist + facts | `cloud/RUNBOOK_FOR_TEAMMATE.md` | PENDING |
 
-## Cross-cutting
-Evidence folder `evidence/` (to be created at build start) · Master README · Evaluation record per rubric line.
+## Remaining open items
+1. Teammate executes the cloud runbook. 2. Reports + Big Data PPT (user to request). 3. Real shop export samples (U-1/U-3) to verify templates. 4. Optional: public GitHub repo / README polish.

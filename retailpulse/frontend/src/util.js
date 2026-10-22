@@ -1,0 +1,10 @@
+const inr = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 0 });
+export const rupees = (paise) => (paise === null || paise === undefined ? '-' : '₹' + inr.format(Math.round(paise / 100)));
+export const rupeesShort = (paise) => { if (paise == null) return '-'; const r = paise / 100; return r >= 1e7 ? `₹${(r / 1e7).toFixed(2)} Cr` : r >= 1e5 ? `₹${(r / 1e5).toFixed(2)} L` : r >= 1e3 ? `₹${(r / 1e3).toFixed(1)}k` : `₹${Math.round(r)}`; };
+export const num = (n, d = 0) => (n === null || n === undefined ? '-' : new Intl.NumberFormat('en-IN', { maximumFractionDigits: d }).format(n));
+export const pct = (n) => (n === null || n === undefined ? '' : `${n > 0 ? '+' : ''}${n}%`);
+export const dshort = (iso) => { if (!iso) return ''; const d = new Date(iso + 'T00:00:00Z'); return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', timeZone: 'UTC' }); };
+export const dlong = (iso) => { if (!iso) return ''; const d = new Date(iso + 'T00:00:00Z'); return d.toLocaleDateString('en-IN', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }); };
+export const COLORS = { primary: '#0f766e', primaryLight: '#5eead4', accent: '#f59e0b', danger: '#dc2626', ok: '#16a34a', slate: '#64748b', blue: '#2563eb', purple: '#7c3aed', grid: '#e5e7eb' };
+export const SERIES = ['#0f766e', '#f59e0b', '#2563eb', '#dc2626', '#7c3aed', '#64748b', '#db2777', '#0891b2'];
+export const title = (s) => String(s || '').toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());

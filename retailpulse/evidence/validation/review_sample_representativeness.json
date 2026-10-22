@@ -1,0 +1,38 @@
+{
+ "full_reviews": 14318519,
+ "sample_reviews": 2002550,
+ "sample_fraction": 0.1399,
+ "rating_distribution": [
+  {
+   "stars": 1,
+   "full_share": 0.1296,
+   "sample_share": 0.1299,
+   "abs_diff_pp": 0.035
+  },
+  {
+   "stars": 2,
+   "full_share": 0.0486,
+   "sample_share": 0.0485,
+   "abs_diff_pp": 0.003
+  },
+  {
+   "stars": 3,
+   "full_share": 0.0627,
+   "sample_share": 0.0626,
+   "abs_diff_pp": 0.011
+  },
+  {
+   "stars": 4,
+   "full_share": 0.0878,
+   "sample_share": 0.0881,
+   "abs_diff_pp": 0.028
+  },
+  {
+   "stars": 5,
+   "full_share": 0.6714,
+   "sample_share": 0.6709,
+   "abs_diff_pp": 0.049
+  }
+ ],
+ "max_abs_diff_pp": 0.049
+}

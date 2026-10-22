@@ -55,7 +55,7 @@ def gbm_feats(Y, origin, cats, h_arr, dates):
         same = [Y[:, tgt - 7 * k] for k in range(1, 6) if tgt - 7 * k <= origin]
         sd = np.mean(same, axis=0) if same else m28
         td = dates[origin] + pd.Timedelta(days=h)
-        rows.append(np.column_stack([m7, m28, m91, sd, nz28, np.full(len(Y), h), np.full(len(Y), td.dayofweek), np.full(len(Y), td.day),
+        rows.append(np.column_stack([m7, m28, m91, sd, nz28, np.full(len(Y), h), np.full(len(Y), td.day_of_week), np.full(len(Y), td.day),
                                      np.full(len(Y), td.month), cats[:, 0], cats[:, 1], m7 / (m91 + 0.1), hist[:, -1]]))
     return np.vstack(rows)
 

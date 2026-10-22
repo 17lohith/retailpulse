@@ -1,0 +1,134 @@
+{
+  "generated": "2026-10-22T20:43:19.946641+00:00",
+  "runtime_s": 212,
+  "all_pass": true,
+  "results": [
+    {
+      "check": "J1 token frequency (bucket|token >= 50)",
+      "keys_hadoop": 57402,
+      "keys_independent": 57402,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J2 per-product count/rating-sum/verified/helpful/histogram",
+      "keys_hadoop": 603182,
+      "keys_independent": 603182,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 1.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J3 monthly review volume",
+      "keys_hadoop": 263,
+      "keys_independent": 263,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J6 verified / length-bucket helpfulness",
+      "keys_hadoop": 6,
+      "keys_independent": 6,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J4 reduce-side join (per-product reviews, rating sum)",
+      "keys_hadoop": 603182,
+      "keys_independent": 603182,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J4b price band x category",
+      "keys_hadoop": 701,
+      "keys_independent": 701,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J5 brand ranking",
+      "keys_hadoop": 80350,
+      "keys_independent": 80350,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J4 join integrity",
+      "orphan_reviews_without_metadata": 0,
+      "joined_products": 603182,
+      "status": "PASS"
+    },
+    {
+      "check": "J7 sales by family x month (pandas)",
+      "keys_hadoop": 1848,
+      "keys_independent": 1848,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 5.00003807246685e-07,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J8 promo vs non-promo (pandas)",
+      "keys_hadoop": 65,
+      "keys_independent": 65,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 5.00120222568512e-07,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J9 weekday profile (pandas)",
+      "keys_hadoop": 609,
+      "keys_independent": 609,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 1.300126314163208e-06,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "J10 waste by family (map-side join) vs pandas",
+      "keys_hadoop": 115,
+      "keys_independent": 115,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    }
+  ]
+}

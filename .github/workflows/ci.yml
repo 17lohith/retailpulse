@@ -1,0 +1,62 @@
+name: CI
+on:
+  push: { branches: [main] }
+  pull_request:
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: retailpulse/backend } }
+    services:
+      mongo:
+        image: mongo:7.0
+        ports: ["27017:27017"]
+        options: >-
+          --ulimit nofile=64000:64000
+          --health-cmd "mongosh --quiet --eval 'db.runCommand({ping:1}).ok'" --health-interval 5s --health-timeout 5s --health-retries 20
+    env:
+      MONGO_URI: mongodb://127.0.0.1:27017/
+      NODE_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: retailpulse/backend/package-lock.json }
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: retailpulse/frontend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: retailpulse/frontend/package-lock.json }
+      - run: npm ci
+      - run: npm run build
+  python:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: retailpulse } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12", cache: pip, cache-dependency-path: retailpulse/engine/requirements.txt }
+      - run: pip install -r engine/requirements.txt pytest duckdb pyarrow
+      - run: pytest        # Hadoop job logic, forecast engine (incl. no-leakage check), cloud ETL function; simulation checks skip without data
+  docker:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend, python]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build all images
+        run: |
+          docker build -t rp-backend retailpulse/backend
+          docker build -t rp-web retailpulse/frontend
+          docker build -t rp-worker retailpulse/engine
+      - name: Smoke test the compose stack
+        working-directory: retailpulse/infra
+        env: { JWT_SECRET: ci-only-secret, WEB_PORT: "18080", API_PORT: "14000", MONGO_PORT: "37017" }
+        run: |
+          docker compose up -d --build
+          for i in $(seq 1 40); do curl -sf localhost:18080/health && break; sleep 3; done
+          curl -sf localhost:18080/health
+          docker compose down -v

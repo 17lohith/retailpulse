@@ -1,0 +1,115 @@
+{
+ "errors": [],
+ "pages": [
+  {
+   "label": "desktop",
+   "name": "today",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "orders",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "stock",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "stock-expiry",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "products",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "sales",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "forecasts",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "insights-feedback",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "import",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "data-quality",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "desktop",
+   "name": "settings",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "today",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "orders",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "stock",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "stock-expiry",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "products",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "sales",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "forecasts",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "insights-feedback",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "import",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "data-quality",
+   "horizontalOverflow": false
+  },
+  {
+   "label": "phone",
+   "name": "settings",
+   "horizontalOverflow": false
+  }
+ ]
+}
