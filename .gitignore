@@ -1,0 +1,8 @@
+retailpulse/data/raw/
+retailpulse/data/clean/
+retailpulse/.venv/
+node_modules/
+__pycache__/
+*.log
+.env
+.kaggle/

@@ -1,0 +1,20 @@
+# Decision Log (ADR-style)
+
+| ID | Date | Decision | Alternatives | Rationale | Status |
+|---|---|---|---|---|---|
+| D-001 | 2026-10-22 | One product (RetailPulse), three subject-specific demos | Three separate projects | Already chosen in Report 2; saves effort | Accepted |
+| D-002 | 2026-10-22 | **MongoDB = sole operational store** (insert/update/delete/query); **Hadoop = batch processing** | Mongo MapReduce / aggregation only | User instruction; faculty intent per user. Pending instructor written confirmation (Q-001) | Accepted, pending Q-001 |
+| D-003 | 2026-10-22 | Hadoop↔Mongo via files: export → HDFS → MapReduce (Hadoop Streaming, Python) → output → PyMongo loader | mongo-hadoop connector | Connector unmaintained since 2017, repo archived 2022 | Accepted |
+| D-004 | 2026-10-22 | Position as POS-agnostic "intelligence layer"; SMB first, "Chain" tier phase 2 | Full POS; enterprise planner | Incumbent POS is cheap and crowded; enterprise needs integrations/sales cycle | Proposed — needs user OK |
+| D-005 | 2026-10-22 | Keep the cloud module's BigQuery as an *analytical copy* of the sales dataset; document explicitly that app data stays in Mongo | Everything in Mongo | Cloud rubric requires BigQuery/BQML/Looker | Proposed |
+| D-006 | 2026-10-22 | Use synthetic stock/expiry data only when labelled "SIMULATED"; no performance claims on it | Pretend real | Honesty rule in Reports 1 & 2 | Accepted |
+| D-007 | 2026-10-22 | Do not build anything until Phase 0 questions answered | Start coding | User instruction: plan only | Accepted |
+| D-008 | 2026-10-22 | **Hadoop MapReduce confirmed** by user (handout wording was an error). Remove Q-001 blocker; no Mongo-MapReduce fallback needed (aggregation pipeline kept only as validation) | — | User confirmation | Accepted |
+| D-009 | 2026-10-22 | Scope = **management system for individual owners and small/mid supermarket chains**. Big-enterprise tier = future scope | Enterprise tier now | User decision | Accepted (supersedes D-004 "proposed") |
+| D-010 | 2026-10-22 | Hadoop jobs run on BOTH reviews and Store Sales | Reviews only | Stronger unified story (Q-004) | Accepted |
+| D-011 | 2026-10-22 | Cloud module deferred to the end, executed by a teammate with their own account; meanwhile build everything locally, incl. Docker and a GitHub Actions workflow file | Start with cloud | No account/credits | Accepted |
+| D-012 | 2026-10-22 | Local dev on Ubuntu 26.04 laptop: user-level installs where possible; `sudo` needed for apt/Docker (agent has no sudo) | — | Environment audit | Accepted |
+| D-013 | 2026-10-22 | Primary dataset = **Amazon Reviews 2023 Grocery & Gourmet Food (reviews + metadata)** (public, no login); SNAP Fine Foods as small dev sample; Store Sales (Kaggle) kept for the cloud forecasting module | Fine Foods only | Real big-data scale, semi-structured, valid join to product metadata | Accepted pending user OK |
+| D-014 | 2026-10-23 | Three data layers: L1 real reviews, L2 real Store Sales demand, L3 **simulated** operations (stock/batches/expiry/POs/waste) generated from real demand; all L3 flagged `simulated:true` | Pure real only (impossible); pure synthetic | No public expiry/stock data exists; keeps honest evidence boundary | Proposed — awaiting R-1 |
+| D-015 | 2026-10-23 | User approved plan v2: 3-layer data (R-1), demo tenants single store + 3-store chain (R-2), **2M-review sample in Mongo** (R-3, full 14.3M = future), English only (R-4), Recharts (R-5), repo `retailpulse` on GitHub (R-6), Hadoop auto-start (R-7), no change to Full Stack list (R-8) | — | User decisions | Accepted (D-014 now Accepted) |
+| D-016 | 2026-10-23 | SaaS onboarding & data lifecycle design (plan/07): upload-first ingestion with auto column mapping + preview + quarantine + idempotent commit/undo; fully automatic training via Mongo job queue + Python worker; backtest-based model selection; "Today" action screen. Engineering decisions E-1…E-10 | See plan/07 §9 | Non-technical SMB users; Mongo-only storage rule | Proposed — awaiting user review |

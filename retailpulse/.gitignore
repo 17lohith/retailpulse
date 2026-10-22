@@ -1,0 +1,5 @@
+data/raw/
+data/clean/
+.venv/
+node_modules/
+*.log
