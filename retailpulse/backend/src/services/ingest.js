@@ -3,12 +3,15 @@ import crypto from 'node:crypto';
 import { ImportJob, ImportError, ImportOverwrite, Product, Sale, InventoryState, Batch, ColumnMapping, Job } from '../models/index.js';
 import { readRows, detectKind, parseNumber, parseDate, parseExpiry, inferDateFormat } from './parse.js';
 import { TYPES, findHeaderRow, suggestMapping } from './mapping.js';
-import { buildMatcher, normName } from './matching.js';
+import { buildMatcher, normName, unmatchedKey } from './matching.js';
 import { tenantContext, addDays } from './context.js';
 import fs from 'node:fs';
 import { config } from '../config.js';
 
 const MAX_ERRORS_STORED = 5000;
+/** service / charge lines that billing software mixes into item reports: postage, delivery, bank charges, manual adjustments, discounts ... */
+const NON_PRODUCT = /^(post|postage|dot|m|manual|d|discount|s|samples?|b|adjust\w*|amazonfee|bank charges|crUk|cruk\w*|c2|carriage|delivery( charges?)?|service charge|round ?off|test\d*)$/i;
+const nonProduct = (name, code) => NON_PRODUCT.test(String(name || '').trim()) || (code && NON_PRODUCT.test(String(code).trim()));
 const TOTAL_ROW = /^(grand\s*)?(sub\s*)?total\b|^report\b|^printed\b/i;
 const touch = (job, patch) => { Object.assign(job, patch); job.updatedAt = new Date(); return job.save(); };
 
@@ -39,6 +42,12 @@ async function* dataRows(job) {
 }
 const cell = (row, idx) => (idx === undefined || idx === null ? undefined : row[idx]);
 const paise = (v) => { const n = parseNumber(v); return n === null ? null : Math.round(n * 100); };
+/** line value in paise: the Amount column when the file has one, else unit price x quantity (many billing exports only give a rate) */
+const lineAmount = (row, f, qty) => {
+  if (f.amount !== undefined) return paise(cell(row, f.amount));
+  if (f.price !== undefined) { const p = parseNumber(cell(row, f.price)); return p === null ? null : Math.round(p * qty * 100); }
+  return null;
+};
 
 export async function validate(job) {
   await touch(job, { status: 'validating', report: { progress: 0 } });
@@ -55,6 +64,7 @@ export async function validate(job) {
     const itemName = String(cell(row, f.item ?? f.name) ?? '').trim(); const code = cell(row, f.itemCode) != null ? String(cell(row, f.itemCode)).trim() : undefined;
     if (TOTAL_ROW.test(itemName) || TOTAL_ROW.test(String(row[0] ?? ''))) { skip('total_or_footer_row'); continue; }
     if (!itemName) { reject(rowNumber, 'missing_item_name', row); continue; }
+    if (type === 'sales' && nonProduct(itemName, code)) { skip('non_product_line'); continue; }
     if (type === 'products') {
       const mrp = f.mrp !== undefined ? paise(cell(row, f.mrp)) : undefined; const cost = f.cost !== undefined ? paise(cell(row, f.cost)) : undefined;
       if ((f.mrp !== undefined && cell(row, f.mrp) != null && cell(row, f.mrp) !== '' && (mrp === null || mrp < 0))) { reject(rowNumber, 'invalid_price', row); continue; }
@@ -74,10 +84,10 @@ export async function validate(job) {
     if (type === 'purchases' && f.expiry !== undefined && cell(row, f.expiry) && !parseExpiry(cell(row, f.expiry), m.dateFormat)) { reject(rowNumber, 'invalid_expiry', row); continue; }
     const hit = matcher.match(itemName, code);
     if (hit?.sku) rep.matched[hit.how]++;
-    else { const key = 'raw:' + normName(itemName); const u = unmatched.get(key) || { key, name: itemName, rows: 0, qty: 0, proposals: hit?.proposals || [] }; u.rows++; u.qty += Math.abs(qty); unmatched.set(key, u); }
+    else { const key = unmatchedKey(itemName, code); const u = unmatched.get(key) || { key, name: itemName, rows: 0, qty: 0, proposals: hit?.proposals || [] }; u.rows++; u.qty += Math.abs(qty); unmatched.set(key, u); }
     if (date) { if (!rep.dates.min || date < rep.dates.min) rep.dates.min = date; if (!rep.dates.max || date > rep.dates.max) rep.dates.max = date; }
-    rep.units += qty; const amt = f.amount !== undefined ? paise(cell(row, f.amount)) : null; if (amt) rep.revenuePaise += amt;
-    const ik = hit?.sku || 'raw:' + normName(itemName); const arr = itemQty.get(ik) || []; if (arr.length < 400) arr.push(Math.abs(qty)); itemQty.set(ik, arr);
+    rep.units += qty; const amt = lineAmount(row, f, qty); if (amt) rep.revenuePaise += amt;
+    const ik = hit?.sku || unmatchedKey(itemName, code); const arr = itemQty.get(ik) || []; if (arr.length < 400) arr.push(Math.abs(qty)); itemQty.set(ik, arr);
     rep.rowsOk++;
   }
   if (errs.length) await ImportError.insertMany(errs, { ordered: false });
@@ -98,7 +108,7 @@ export async function commit(job, req) {
   const prodByName = new Map();
   async function resolveSku(name, code, category, amountPaise, qty) {
     const hit = matcher.match(name, code); if (hit?.sku) return hit.sku;
-    const key = 'raw:' + normName(name); const r = resolutions[key];
+    const key = unmatchedKey(name, code); const r = resolutions[key];
     if (r?.action === 'skip') return null; if (r?.action === 'link' && r.sku) return r.sku;
     if (r?.action === 'create' || auto) {
       if (created.has(key)) return created.get(key);
@@ -112,8 +122,9 @@ export async function commit(job, req) {
     const agg = new Map(); const storeId = job.storeId;
     for await (const { rowNumber, row } of dataRows(job)) {
       const itemName = String(cell(row, f.item) ?? '').trim(); if (!itemName || TOTAL_ROW.test(itemName)) continue;
+      if (nonProduct(itemName, cell(row, f.itemCode))) continue;
       const date = parseDate(cell(row, f.date), m.dateFormat); const qty = parseNumber(cell(row, f.qty)); if (!date || qty === null || qty === 0 || date > addDays(ctx.today, 1)) continue;
-      const amt = f.amount !== undefined ? paise(cell(row, f.amount)) : null;
+      const amt = lineAmount(row, f, qty);
       const sku = await resolveSku(itemName, cell(row, f.itemCode) != null ? String(cell(row, f.itemCode)).trim() : undefined, String(cell(row, f.category) ?? '').trim() || undefined, amt, qty); if (!sku) continue;
       const k = `${date}|${sku}`; const a = agg.get(k) || { date, sku, qty: 0, rev: 0, hasAmt: false }; a.qty += qty; if (amt !== null) { a.rev += amt; a.hasAmt = true; } agg.set(k, a); res.rows++;
     }

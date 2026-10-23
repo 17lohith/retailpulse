@@ -66,10 +66,18 @@
       "RMSE": 264.6181536113218,
       "MASE": 1.209317538358515,
       "bias_pct": 0.22036029314198924
+    },
+    "selector_guarded": {
+      "WAPE": 0.1444382988850068,
+      "MAE": 76.15962645084882,
+      "RMSE": 259.9282332664118,
+      "MASE": 1.1739579403995515,
+      "bias_pct": -0.2394109701575029
     }
   },
   "ranking": [
     "gbm",
+    "selector_guarded",
     "selector",
     "ets",
     "seasonal_avg4",
@@ -352,5 +360,5 @@
       "actual_units": 29889.8070385
     }
   },
-  "runtime_s": 715
+  "runtime_s": 173
 }

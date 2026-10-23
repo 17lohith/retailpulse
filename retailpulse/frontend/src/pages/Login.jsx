@@ -46,7 +46,8 @@ export default function Login({ register }) {
           {!register && <div className="mt-4 pt-3 border-top">
             <div className="rp-sub mb-2 text-center">Just want to look around? Try a demo shop (simulated data)</div>
             <div className="d-grid gap-2"><button type="button" className="btn btn-outline-primary" disabled={busy} onClick={() => demo('demo-a')}><i className="bi bi-shop me-2" />Single store - Sri Lakshmi Provision</button>
-              <button type="button" className="btn btn-outline-primary" disabled={busy} onClick={() => demo('demo-b')}><i className="bi bi-buildings me-2" />3-store chain - GreenMart</button></div></div>}
+              <button type="button" className="btn btn-outline-primary" disabled={busy} onClick={() => demo('demo-b')}><i className="bi bi-buildings me-2" />3-store chain - GreenMart</button>
+              <button type="button" className="btn btn-outline-primary" disabled={busy} onClick={() => demo('demo-c')}><i className="bi bi-basket2 me-2" />Indian supermarket - Annapurna (₹ catalogue)</button></div></div>}
         </form>
       </div>
     </div>

@@ -1,0 +1,59 @@
+{
+  "tenant": "demo-c",
+  "tenant_name": "Annapurna Fresh & Provisions",
+  "kind": "single supermarket (Indian catalogue)",
+  "SIMULATED": true,
+  "seed": 42,
+  "real_stores_used": [
+    31
+  ],
+  "date_shift_days": 3290,
+  "real_window": [
+    "2015-08-12",
+    "2017-08-15"
+  ],
+  "visible_through": "2026-07-21",
+  "hidden_future_days": 28,
+  "products": 1092,
+  "currency": "INR",
+  "usd_to_inr_assumption": null,
+  "catalog": "bigbasket",
+  "family_reconciliation_ok": {
+    "demo-c-S1": {
+      "GROCERY I": true,
+      "GROCERY II": true,
+      "BEVERAGES": true,
+      "BREAD/BAKERY": true,
+      "DAIRY": true,
+      "FROZEN FOODS": true,
+      "PRODUCE": true,
+      "MEATS": true,
+      "SEAFOOD": true,
+      "EGGS": true,
+      "DELI": true,
+      "PREPARED FOODS": true,
+      "CLEANING": true,
+      "PERSONAL CARE": true,
+      "PET SUPPLIES": true,
+      "BABY CARE": true
+    }
+  },
+  "per_store": {
+    "demo-c-S1": {
+      "real_store_nbr": 31,
+      "visible_batches": 90907,
+      "scale": 0.1592,
+      "mean_daily_units": 1977.4204081632654,
+      "sku_days_stockout_share": 0.05799953811808781,
+      "lost_units_share": 0.05404278507558802,
+      "pos": 3256,
+      "batches": 90907,
+      "expiry_writeoff_units": 63451,
+      "shrink_events": 930,
+      "closed_days": 4
+    }
+  },
+  "sales_rows_visible": 374059,
+  "sales_rows_future": 15416,
+  "runtime_s": 40.5
+}

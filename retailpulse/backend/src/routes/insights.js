@@ -72,6 +72,54 @@ r.get('/waste', wrap(async (req, res) => {
   res.json({ simulated: true, note: 'Simulated operations data. Computed with a Hadoop map-side join of adjustments with the product table.', rows: Object.values(by).sort((a, b) => b.writtenOffUnits - a.writtenOffUnits) });
 }));
 
+const PRIOR_ORDERS = (() => { try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'evidence/data_profile/external_instacart.json'), 'utf8')).eval_sets.prior; } catch { return 3214874; } })();
+const R2 = (x, d = 2) => Math.round(x * 10 ** d) / 10 ** d;
+r.get('/datasets', wrap(async (_req, res) => res.json(await col('ext_datasets').find({}, { projection: { _id: 0 } }).toArray())));
+
+/** Hadoop results on the external research datasets (Instacart, Dunnhumby, Online Retail II, M5, supermarket waste reference, RC Superstore) */
+r.get('/external', wrap(async (_req, res) => res.json(await memo('ext', async () => {
+  const J2 = (job) => col('mr_results').find({ job }).toArray();
+  const [sup, pairs, reo, timing, dh, bsz, ret, m5c, waste, drift, names] = await Promise.all([J2('X1_item_support'), J2('X1c_pair_counts'), J2('X2_reorder_by_department'), J2('X3_order_timing'), J2('X4_discount_depth'), J2('X4c_basket_size_histogram'),
+    J2('X5_online_retail'), J2('X6b_class_by_department'), J2('X7_supermarket_waste'), J2('X8_price_drift'), col('ext_names').find({}).toArray()]);
+  if (!pairs.length) throw new HttpError(404, 'not_loaded', 'External-dataset results have not been loaded yet.');
+  // ---- basket analysis (support, confidence, lift)
+  const sMap = Object.fromEntries(sup.map((x) => [x.key, x.values.orders])); const top = pairs.map((x) => { const [a, b] = x.key.split(','); const c = x.values.count; return { a, b, count: c, lift: (c * PRIOR_ORDERS) / (sMap[a] * sMap[b]), confAB: c / sMap[a], confBA: c / sMap[b] }; });
+  const ids = [...new Set(top.flatMap((x) => [x.a, x.b]))].map(Number); const nm = Object.fromEntries((await col('ext_instacart_products').find({ product_id: { $in: ids } }).toArray()).map((p) => [String(p.product_id), p.name]));
+  const fmtPair = (x) => ({ a: nm[x.a], b: nm[x.b], count: x.count, lift: R2(x.lift, 1), support: R2((x.count / PRIOR_ORDERS) * 100, 2), confidenceAtoB: R2(x.confAB * 100, 1) });
+  const byCount = [...top].sort((p, q) => q.count - p.count).slice(0, 12).map(fmtPair); const byLift = top.filter((x) => x.count >= 800).sort((p, q) => q.lift - p.lift).slice(0, 12).map(fmtPair);
+  // ---- reorder rates
+  const nmOf = (kind, id) => names.find((n) => n.kind === kind && String(n.id) === id)?.name || id;
+  const dept = reo.filter((x) => x.key.startsWith('D:')).map((x) => ({ department: nmOf('instacart_department', x.key.slice(2)), lines: x.values.lines, reorderRate: R2(x.values.rate * 100, 1) })).sort((a, b) => b.reorderRate - a.reorderRate);
+  const aisle = reo.filter((x) => x.key.startsWith('A:') && x.values.lines >= 20000).map((x) => ({ aisle: nmOf('instacart_aisle', x.key.slice(2)), lines: x.values.lines, reorderRate: R2(x.values.rate * 100, 1) })).sort((a, b) => b.reorderRate - a.reorderRate);
+  // ---- order timing heatmap
+  const heat = Array.from({ length: 7 }, () => Array(24).fill(0)); for (const x of timing.filter((t) => t.key.startsWith('H:'))) { const [d, h] = x.key.slice(2).split('|'); heat[+d][+h] = x.values.orders; }
+  const recency = timing.filter((t) => t.key.startsWith('G:')).map((t) => ({ days: t.key.slice(2), orders: t.values.orders })).sort((a, b) => (a.days === '30+') - (b.days === '30+') || a.days.localeCompare(b.days));
+  // ---- Dunnhumby discounts
+  const D = {}; for (const x of dh) { const [d, q, b] = x.key.split('|'); const v = x.values; const t = (D[d] ??= { net: 0, rd: 0, cd: 0, lines: 0, byBrand: {}, byQ: {} }); t.net += v.netSales; t.rd += v.retailDisc; t.cd += v.couponDisc; t.lines += v.lines; (t.byBrand[b] ??= { net: 0, rd: 0 }); t.byBrand[b].net += v.netSales; t.byBrand[b].rd += v.retailDisc; (t.byQ[q] ??= { net: 0, rd: 0 }); t.byQ[q].net += v.netSales; t.byQ[q].rd += v.retailDisc; }
+  const loyal = (n, rd) => (rd < 0 ? (-rd / (n - rd)) * 100 : 0);
+  const depts = Object.entries(D).filter(([k]) => k !== 'UNKNOWN').map(([k, v]) => ({ department: k, netSales: Math.round(v.net), loyaltyDiscountPct: R2(loyal(v.net, v.rd), 1), couponPct: R2((-v.cd / Math.max(v.net - v.rd, 1)) * 100, 2), lines: v.lines })).sort((a, b) => b.netSales - a.netSales).slice(0, 10);
+  const allB = {}; for (const v of Object.values(D)) for (const [b, t] of Object.entries(v.byBrand)) { (allB[b] ??= { net: 0, rd: 0 }); allB[b].net += t.net; allB[b].rd += t.rd; }
+  const brandType = Object.entries(allB).filter(([b]) => ['Private', 'National'].includes(b)).map(([b, t]) => ({ brandType: b, netSales: Math.round(t.net), loyaltyDiscountPct: R2(loyal(t.net, t.rd), 1) }));
+  const basket = bsz.map((b) => ({ size: b.key.slice(5), baskets: b.values.baskets, avgSpend: R2(b.values.sales / b.values.baskets, 2) })).sort((a, b) => a.size.localeCompare(b.size));
+  // ---- returns (Online Retail II)
+  const M = ret.filter((x) => x.key.startsWith('M:')).map((x) => ({ month: x.key.slice(2), revenue: Math.round(x.values.v[2]), soldUnits: x.values.v[1], returnedUnits: x.values.v[4], returnRatePct: R2((x.values.v[4] / Math.max(x.values.v[1], 1)) * 100, 1) })).sort((a, b) => a.month.localeCompare(b.month));
+  const P = ret.filter((x) => x.key.startsWith('P:') && x.values.v[0] >= 1500).map((x) => ({ code: x.key.slice(2), sold: x.values.v[0], returned: x.values.v[1], ratePct: R2((x.values.v[1] / x.values.v[0]) * 100, 1) })).sort((a, b) => b.ratePct - a.ratePct).slice(0, 10);
+  const dsc = Object.fromEntries((await col('ext_retail_desc').find({ code: { $in: P.map((p) => p.code) } }).toArray()).map((d) => [d.code, d.description])); P.forEach((p) => { p.description = dsc[p.code] || p.code; });
+  const country = ret.filter((x) => x.key.startsWith('C:')).map((x) => ({ country: x.key.slice(2), revenue: Math.round(x.values.v[0]) })).sort((a, b) => b.revenue - a.revenue).slice(0, 8);
+  // ---- M5 demand classes
+  const mix = {}; for (const x of m5c) { const [d, k] = x.key.split('|'); (mix[d] ??= { dept: d, series: 0, zeroShare: 0 }); mix[d][k] = x.values.series; mix[d].series += x.values.series; mix[d].zeroShare += x.values.days - x.values.nonzeroDays; mix[d]._days = (mix[d]._days || 0) + x.values.days; }
+  const m5 = Object.values(mix).map((m) => ({ ...m, zeroDaysPct: R2((m.zeroShare / m._days) * 100, 1), zeroShare: undefined, _days: undefined }));
+  // ---- waste reference
+  const W = {}; for (const x of waste) { const [c] = x.key.split('|'); const v = x.values; const t = (W[c] ??= { sold: 0, wasted: 0, loss: 0, oos: 0, rows: 0 }); t.sold += v.sold; t.wasted += v.wasted; t.loss += v.lossUsd; t.oos += v.oosDays; t.rows += v.rows; }
+  const wasteRows = Object.entries(W).map(([c, t]) => ({ category: c, wastePctOfSold: R2((t.wasted / t.sold) * 100, 2), oosDaysPct: R2((t.oos / t.rows) * 100, 1), wastedUnits: t.wasted })).sort((a, b) => b.wastePctOfSold - a.wastePctOfSold);
+  // ---- price drift
+  const months = drift.filter((x) => x.key.startsWith('M:')).map((x) => ({ month: x.key.slice(2), products: x.values.v[0], avgPrice: R2(x.values.v[1] / x.values.v[0], 2), dealSharePct: R2((x.values.v[2] / x.values.v[0]) * 100, 1) })).sort((a, b) => a.month.localeCompare(b.month));
+  const mv = drift.filter((x) => x.key.startsWith('P:') && x.values.v[0] >= 8 && x.values.v[1] > 0.5).map((x) => ({ id: x.key.slice(2), months: x.values.v[0], min: x.values.v[1], max: x.values.v[2], swingPct: R2(((x.values.v[2] - x.values.v[1]) / x.values.v[1]) * 100, 0), dealMonths: x.values.v[4] })).sort((a, b) => b.swingPct - a.swingPct).slice(0, 8);
+  const tt = Object.fromEntries((await col('ext_rc_titles').find({ productId: { $in: mv.map((m) => m.id) } }).toArray()).map((t) => [t.productId, t.title])); mv.forEach((m) => { m.title = tt[m.id] || m.id; });
+  return { priorOrders: PRIOR_ORDERS, baskets: { byCount, byLift }, reorder: { departments: dept, aisleHigh: aisle.slice(0, 8), aisleLow: aisle.slice(-8).reverse() }, timing: { heat, recency }, discounts: { departments: depts, brandType, basketSizes: basket },
+    returns: { monthly: M, topReturned: P, countries: country }, demandClasses: m5, waste: wasteRows, priceDrift: { months, biggestSwings: mv } };
+}))));
+
 r.get('/model-health', wrap(async (req, res) => {
   const run = await col('forecast_runs').findOne({ tenantId: req.tenantId }, { sort: { createdAt: -1 }, projection: { _id: 0 } });
   let favorita = null; try { favorita = JSON.parse(fs.readFileSync(path.join(ROOT, 'evidence/forecast/favorita_metrics.json'), 'utf8')); } catch { /* not generated yet */ }

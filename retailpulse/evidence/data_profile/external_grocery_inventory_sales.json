@@ -1,0 +1,40 @@
+{
+ "license": null,
+ "rows": 992,
+ "nulls": {
+  "Product_ID": 0.002,
+  "Product_Name": 0.002,
+  "Catagory": 0.003,
+  "Supplier_ID": 0.002,
+  "Supplier_Name": 0.002,
+  "Stock": 0.0081,
+  "Reorder_Level": 0.002,
+  "Reorder_Quantity": 0.002,
+  "Price": 0.005,
+  "Date_Received": 0.003,
+  "Last_Order_Date": 0.002,
+  "Expiration_Date": 0.002,
+  "Warehouse_Location": 0.002,
+  "Sales_Volume": 0.002,
+  "Inventory_Turnover_Rate": 0.002,
+  "Status": 0.002
+ },
+ "statuses": {
+  "Discontinued": 333,
+  "Active": 332,
+  "Backordered": 325
+ },
+ "categories": {
+  "Fruits & Vegetables": 331,
+  "Dairy": 180,
+  "Grains & Pulses": 162,
+  "Seafood": 90,
+  "Oils & Fats": 77,
+  "Beverages": 75,
+  "Bakery": 74
+ },
+ "expiry_before_received": 495,
+ "stock_below_reorder": 453,
+ "duplicate_product_ids": 1,
+ "blank_price": 5
+}

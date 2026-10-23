@@ -1,24 +1,24 @@
 {
   "tenantId": "demo-b",
-  "runId": "5264a52e2e51",
+  "runId": "3ad05410f9e9",
   "asOf": "2026-07-21",
-  "createdAt": "2026-10-22 20:48:54.791659",
-  "seconds": 367.7,
+  "createdAt": "2026-10-23 05:05:49.310781",
+  "seconds": 181.1,
   "simulated": true,
   "series": 3402,
-  "recommendations": 329,
+  "recommendations": 262,
   "modelCounts": {
-    "gbm": 2172,
-    "croston_sba": 322,
-    "seasonal_avg4": 395,
-    "ma28": 513
+    "gbm": 3000,
+    "croston_sba": 54,
+    "seasonal_avg4": 88,
+    "ma28": 260
   },
   "horizonDays": 28,
   "honestScore": {
     "window": "last 28 days, selection made on the preceding 28 days",
-    "wapeSelected": 0.4583731787338079,
+    "wapeSelected": 0.44833470747836,
     "wapeBaselineSeasonalAvg4": 0.4781450670831247,
-    "coverage80": 0.8253524128973391
+    "coverage80": 0.8292222884685532
   },
   "note": "SIMULATED tenant: scores describe the simulation, not real shops."
 }

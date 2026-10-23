@@ -137,3 +137,48 @@ def build_catalog(meta_path, n_by_family, seed, tenant_id):
                 p["tenantId"] = tenant_id
                 p["active"] = True
     return products
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
+# Indian catalogue from the BigBasket product list (real Indian products, prices already in INR)
+FAMILIES_BB = {**FAMILIES, "BABY CARE": (0.20, 365, "estimate", 6, 40, "home")}
+BB_MAP = {  # (category, sub_category or None) -> family ; None = any sub-category
+    ("Fruits & Vegetables", None): "PRODUCE",
+    ("Eggs, Meat & Fish", "Eggs"): "EGGS", ("Eggs, Meat & Fish", "Fish & Seafood"): "SEAFOOD", ("Eggs, Meat & Fish", "Mutton & Lamb"): "MEATS",
+    ("Eggs, Meat & Fish", "Pork & Other Meats"): "MEATS", ("Eggs, Meat & Fish", "Sausages, Bacon & Salami"): "DELI",
+    ("Bakery, Cakes & Dairy", "Dairy"): "DAIRY", ("Bakery, Cakes & Dairy", "Non Dairy"): "DAIRY", ("Bakery, Cakes & Dairy", "Ice Creams & Desserts"): "FROZEN FOODS",
+    ("Bakery, Cakes & Dairy", None): "BREAD/BAKERY", ("Beverages", None): "BEVERAGES", ("Foodgrains, Oil & Masala", None): "GROCERY I",
+    ("Snacks & Branded Foods", "Frozen Veggies & Snacks"): "FROZEN FOODS", ("Snacks & Branded Foods", "Ready To Cook & Eat"): "PREPARED FOODS", ("Snacks & Branded Foods", None): "GROCERY II",
+    ("Gourmet & World Food", "Dairy & Cheese"): "DAIRY", ("Gourmet & World Food", "Drinks & Beverages"): "BEVERAGES", ("Gourmet & World Food", "Cooking & Baking Needs"): "GROCERY I",
+    ("Gourmet & World Food", None): "GROCERY II",
+    ("Cleaning & Household", "Stationery"): None, ("Cleaning & Household", "Bins & Bathroom Ware"): None, ("Cleaning & Household", "Car & Shoe Care"): None, ("Cleaning & Household", "Party & Festive Needs"): None,
+    ("Cleaning & Household", None): "CLEANING",
+    ("Beauty & Hygiene", "Health & Medicine"): None, ("Beauty & Hygiene", "Makeup"): None, ("Beauty & Hygiene", "Mothers & Maternity"): None, ("Beauty & Hygiene", None): "PERSONAL CARE",
+    ("Baby Care", "Baby Accessories"): None, ("Baby Care", "Feeding & Nursing"): None, ("Baby Care", "Mothers & Maternity"): None, ("Baby Care", None): "BABY CARE",
+    ("Kitchen, Garden & Pets", "Pet Food & Accessories"): "PET SUPPLIES",
+}
+
+
+def bb_family(cat, sub):
+    if (cat, sub) in BB_MAP: return BB_MAP[(cat, sub)]
+    return BB_MAP.get((cat, None))
+
+
+def build_catalog_bigbasket(csv_path, n_by_family, seed, tenant_id):
+    import pandas as pd
+    rng = random.Random(seed); nrng = np.random.default_rng(seed)
+    df = pd.read_csv(csv_path)
+    df["family"] = [bb_family(c, s) for c, s in zip(df.category, df.sub_category)]
+    df = df[df.family.notna() & df["product"].notna() & df.sale_price.notna() & (df.sale_price >= 2)].drop_duplicates(subset=["product", "brand"])
+    products, seq = [], 0
+    for fam, (margin, shelf, policy, pack, _n, sup) in FAMILIES_BB.items():
+        pool = df[df.family == fam]
+        if pool.empty: continue
+        w = (pool.rating.fillna(pool.rating.mean() if pool.rating.notna().any() else 3.5) + 0.5).values; w = w / w.sum()   # mild preference for rated products
+        pick = pool.iloc[nrng.choice(len(pool), size=min(n_by_family.get(fam, 0), len(pool)), replace=False, p=w)]
+        for r in pick.itertuples():
+            seq += 1; sale = float(r.sale_price); m = min(0.5, max(0.03, rng.gauss(margin, 0.03)))
+            products.append(dict(sku=f"SKU-{seq:05d}", name=re.sub(r"\s+", " ", str(r.product)).strip()[:90], brand=str(r.brand), family=fam, subcategory=str(r.sub_category), barcode="890" + "".join(str(rng.randint(0, 9)) for _ in range(9)) + "0",
+                                 mrpPaise=int(round(sale * 100)), listPricePaise=int(round(float(r.market_price) * 100)), costPaise=int(round(sale * 100 * (1 - m))), packSize=pack, shelfLifeDays=shelf, trackingPolicy=policy,
+                                 supplierKey=sup, catalog_source="bigbasket", price_imputed=False, simulated=True, tenantId=tenant_id, active=True))
+    return products

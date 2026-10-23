@@ -1,0 +1,58 @@
+{
+ "license": null,
+ "rows": 27555,
+ "columns": [
+  "index",
+  "product",
+  "category",
+  "sub_category",
+  "brand",
+  "sale_price",
+  "market_price",
+  "type",
+  "rating",
+  "description"
+ ],
+ "nulls": {
+  "product": 0.0,
+  "brand": 0.0,
+  "rating": 0.313,
+  "description": 0.0042
+ },
+ "categories": {
+  "Beauty & Hygiene": 7867,
+  "Gourmet & World Food": 4690,
+  "Kitchen, Garden & Pets": 3580,
+  "Snacks & Branded Foods": 2814,
+  "Foodgrains, Oil & Masala": 2676,
+  "Cleaning & Household": 2675,
+  "Beverages": 885,
+  "Bakery, Cakes & Dairy": 851,
+  "Baby Care": 610,
+  "Fruits & Vegetables": 557,
+  "Eggs, Meat & Fish": 350
+ },
+ "brands": 2313,
+ "sale_price": {
+  "count": 27555.0,
+  "mean": 322.5148078388677,
+  "std": 486.2631155428672,
+  "min": 2.45,
+  "25%": 95.0,
+  "50%": 190.0,
+  "75%": 359.0,
+  "max": 12500.0
+ },
+ "market_price": {
+  "count": 27555.0,
+  "mean": 382.05666448920346,
+  "std": 581.7307174034926,
+  "min": 3.0,
+  "25%": 100.0,
+  "50%": 220.0,
+  "75%": 425.0,
+  "max": 12500.0
+ },
+ "discount_share": 0.5526764652513155,
+ "duplicate_names": 4014
+}

@@ -19,6 +19,13 @@ Prerequisites: stack running (`infra/stack.sh start`, API on :4000, `npm run dev
 6. MongoDB: the loaded collections and counts, indexes, a query with `explain()`, insert/update/delete through the API, results shown in the app (**Insights**). 
 7. Insights + limits: frequency ≠ sentiment, promo effect is association, price known for 37 % of products, reviews ≠ sales. Mention the 2 M-review sample (representative within 0.05 pp) and that the full set is processed by Hadoop.
 
+### Extra for the Big Data demo: external retail datasets (added)
+8. Open **Insights → Retail research** and **Data sources**. Narrative: five real datasets (Instacart 32.4 M, M5 46.8 M, Dunnhumby 2.6 M, Online Retail II 1.1 M, Superstore 0.1 M) → 13 further Hadoop job runs.
+9. Walk the **Apriori-style chain** (`x1_support` → `x1b_baskets` with distributed-cache pruning → `x1c_pairs`), then show lift results (bananas+avocados 2.5×; yogurt variants > 300×).
+10. Show **demand classification at scale** (X6, 46.8 M points in 83 s) and connect it to the engine: `pipeline.py` uses the same Syntetos-Boylan rule.
+11. Show validation `evidence/validation/validation_external.md` (12/12 PASS) and the M5 benchmark (`evidence/forecast/m5_foods_metrics.json`: baseline 0.705 → 0.660).
+12. Importer on real billing data: upload `data/clean/ext/online_retail_sample.csv` (300 k rows) - columns detected, returns netted, service lines skipped.
+
 ## Cloud Computing for Data Analytics
 1. Problem: food-retail demand forecasting; dataset Store Sales (Kaggle).
 2. Architecture diagram (README). `docker compose up` → show all four services healthy and `/health`.

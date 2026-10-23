@@ -1,0 +1,43 @@
+{
+ "license": null,
+ "transaction_rows": 2595732,
+ "columns": [
+  "household_key",
+  "BASKET_ID",
+  "DAY",
+  "PRODUCT_ID",
+  "QUANTITY",
+  "SALES_VALUE",
+  "STORE_ID",
+  "RETAIL_DISC",
+  "TRANS_TIME",
+  "WEEK_NO",
+  "COUPON_DISC",
+  "COUPON_MATCH_DISC"
+ ],
+ "households": 2500,
+ "baskets": 276484,
+ "products": 92339,
+ "stores": 582,
+ "day_range": [
+  1,
+  711
+ ],
+ "weeks": 102,
+ "nulls": {},
+ "negative_sales": 0,
+ "zero_quantity": 14466,
+ "retail_discount_rows": 1303026,
+ "coupon_rows": 36422,
+ "causal_rows": 36786524,
+ "departments": {
+  "GROCERY": 39021,
+  "DRUG GM": 31529,
+  "PRODUCE": 3118,
+  "COSMETICS": 3011,
+  "NUTRITION": 2914,
+  "MEAT": 2544,
+  "MEAT-PCKGD": 2427,
+  "DELI": 2354
+ }
+}

@@ -1,0 +1,18 @@
+{
+ "license": null,
+ "rows": 73100,
+ "stores": 5,
+ "products": 20,
+ "categories": {
+  "Furniture": 14699,
+  "Toys": 14643,
+  "Clothing": 14626,
+  "Groceries": 14611,
+  "Electronics": 14521
+ },
+ "date_min": "2022-01-01",
+ "date_max": "2024-01-01",
+ "nulls": {},
+ "sold_gt_inventory": 0,
+ "corr_units_vs_forecast": 0.9968530435356839
+}

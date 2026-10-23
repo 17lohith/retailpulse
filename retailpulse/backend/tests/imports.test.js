@@ -47,6 +47,23 @@ describe('import pipeline - sales', () => {
     const { id } = await run(s, utf8Rupee(), 'u.csv'); await commit(s, id);
     const d = await mongoose.connection.collection('sales').findOne({ tenantId: s.tenantId, sku: 'MILK1' }); expect(d.qty).toBe(100000); expect(d.revenuePaise).toBe(123456750);
   });
+  test('unit-price files (no amount column) get revenue = quantity x price; one item code with several descriptions becomes ONE item', async () => {
+    const s = await newShop();
+    const buf = Buffer.from('Invoice,StockCode,Description,Quantity,InvoiceDate,Price\n1,85048,15CM CHRISTMAS GLASS BALL,12,2009-12-01 07:45:00,6.95\n2,85048,CHRISTMAS GLASS BALL 20 LIGHTS,3,2009-12-01 09:10:00,6.95\nC3,85048,15CM CHRISTMAS GLASS BALL,-1,2009-12-02 10:00:00,6.95\n4,22111,SCOTTIE DOG HOT WATER BOTTLE,2,2009-12-02 11:00:00,4.25\n');
+    const { id, up, prev } = await run(s, buf, 'retail.csv', { options: { autoCreateUnmatched: true } });
+    expect(up.analysis.suggested.price.name).toBe('Price'); expect(up.analysis.suggested.itemCode.name).toBe('StockCode'); expect(prev.report.unmatchedItems).toBe(2);   // 85048 + 22111, not 3
+    await commit(s, id);
+    expect(await mongoose.connection.collection('products').countDocuments({ tenantId: s.tenantId })).toBe(2);
+    const d = await mongoose.connection.collection('sales').findOne({ tenantId: s.tenantId, sku: '85048', date: '2009-12-01' }); expect(d.qty).toBe(15); expect(d.revenuePaise).toBe(Math.round(15 * 6.95 * 100));
+    expect((await mongoose.connection.collection('sales').findOne({ tenantId: s.tenantId, sku: '85048', date: '2009-12-02' })).qty).toBe(0);   // a return nets the day to 0, never negative
+  });
+  test('service lines (postage, bank charges, manual adjustments) are skipped and reported, not imported as products', async () => {
+    const s = await newShop();
+    const buf = Buffer.from('Date,Item Name,Item Code,Quantity,Price\n01/09/2026,Tea 250 g,T1,2,50\n01/09/2026,POSTAGE,POST,1,18\n01/09/2026,Bank Charges,BANK CHARGES,1,15\n01/09/2026,Manual,M,1,100\n');
+    const { id, prev } = await run(s, buf, 'svc.csv', { options: { autoCreateUnmatched: true } });
+    expect(prev.report.skippedByReason.non_product_line).toBe(3); expect(prev.report.rowsOk).toBe(1); expect(prev.report.reconciles).toBe(true);
+    await commit(s, id); expect(await mongoose.connection.collection('products').countDocuments({ tenantId: s.tenantId })).toBe(1);
+  });
   test('unmatched items are proposed, never auto-merged; owner can create or skip', async () => {
     const s = await newShop(); await mkProducts(s, [{ sku: 'MILK1', name: 'Amul Milk 500 ml' }]);
     const buf = Buffer.from('Date,Item Name,Quantity\n01/09/2026,Amul Taaza Milk 500ml,5\n01/09/2026,Brand New Soap,3\n');

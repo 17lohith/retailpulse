@@ -93,3 +93,12 @@ Executed docs/plan/10_implementation_plan.md. Order and key facts (details & num
 9. **Stage 9 Docker/CI/cloud code** – 3 Dockerfiles + compose (verified healthy), nginx API upstream templated for Cloud Run, CI (4 jobs) + inactive deploy workflow, Cloud Run function + tests, 5 BigQuery SQL files, DuckDB local stand-in whose baselines match Python to 1e-15, Looker spec, teammate runbook.
 10. **End-to-end** – new-owner journey through the real API: 228,968-row upload, 100 % matched, learning job, Today screen.
 - Pending: reports/PPT (user will request), cloud execution (teammate), real shop export samples (U-1), final quiet-machine timing table.
+
+## 2026-10-23 — External dataset research, download, analysis, Hadoop demo (user request)
+- Search: web + Kaggle API. Downloaded 11 datasets (~2.4 GB) into `data/raw/external/` (not in git); profiled all (`data_prep/profile_external.py`). Licences recorded. M5 competition (403 – rules not accepted) → MIT parquet mirror; Open Food Facts remote parquet rate-limited by HuggingFace (HTTP 429) → official dump streamed through an India filter in the background (slow link, optional).
+- Data prep (`data_prep/prepare_external.py`): M5 parquet→CSV (1.49 GB, 46.8 M rows); RC Superstore 12 drifting schemas → JSONL; first version marked 0 % promotions (deal text column empty) → fixed using `wasPrice > price` (5.1 % on deal).
+- Hadoop X1–X8 (13 runs), `run_ext.sh`; independent validation 12/12 PASS; loaded to MongoDB (`load_external.py`) incl. dataset registry; API `/api/insights/external`, `/datasets`; UI tabs *Retail research* and *Data sources*.
+- Real SKU-level benchmark on M5; production selection rule changed to guarded selection (D-028), demos refreshed; Favorita re-run as independent check.
+- Importer hardening from real Online Retail II (300 k rows): unit price, code keys, service lines; tests 45→47; real-file import evidence.
+- New simulated shop demo-c (Indian catalogue). Waste-rate assumption cross-checked against synthetic reference.
+- Python tests 25→30; Jest 47. Screenshots refreshed (animations disabled for deterministic capture).

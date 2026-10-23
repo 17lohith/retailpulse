@@ -1,0 +1,30 @@
+{
+ "license": null,
+ "rows": 1067371,
+ "invoices": 53628,
+ "products": 5305,
+ "customers": 5942,
+ "countries": 43,
+ "date_min": "2009-12-01 07:45:00",
+ "date_max": "2011-12-09 12:50:00",
+ "nulls": {
+  "Description": 0.0041,
+  "Customer ID": 0.2277
+ },
+ "cancellation_rows": 19494,
+ "cancellation_share": 0.018263565339511754,
+ "negative_qty": 22950,
+ "zero_or_neg_price": 6207,
+ "non_product_stockcodes": 5986,
+ "exact_duplicate_rows": 34335,
+ "lines_per_invoice": {
+  "count": 53628.0,
+  "mean": 19.90324084433505,
+  "std": 41.25257318914108,
+  "min": 1.0,
+  "25%": 2.0,
+  "50%": 9.0,
+  "75%": 23.0,
+  "max": 1350.0
+ }
+}

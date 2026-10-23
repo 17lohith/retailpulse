@@ -7,6 +7,7 @@ export const TYPES = {
     date: { req: true, syn: S('date', 'saledate', 'billdate', 'invoicedate', 'txndate', 'transactiondate', 'dated', 'day', 'orderdate', 'voucherdate') },
     item: { req: true, syn: S('itemname', 'item', 'product', 'productname', 'particulars', 'description', 'itemdescription', 'goods', 'article', 'name') },
     qty: { req: true, syn: S('quantity', 'qty', 'qtysold', 'soldqty', 'quantitysold', 'units', 'nos', 'pcs', 'salesqty') },
+    price: { syn: S('unitprice', 'price', 'rate', 'unitrate', 'saleprice', 'sellingprice', 'salerate') },
     amount: { syn: S('saleamount', 'amount', 'netamount', 'totalamount', 'total', 'value', 'netsales', 'sales', 'revenue') },
     itemCode: { syn: S('itemcode', 'code', 'sku', 'itemno', 'productcode', 'plu', 'barcode') },
     category: { syn: S('category', 'itemgroup', 'group', 'department', 'family', 'class', 'categoryname') },

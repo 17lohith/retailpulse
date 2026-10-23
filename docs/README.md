@@ -5,6 +5,7 @@ Status (2026-10-23): **Environment + raw data ready; master plan v2 awaiting use
 | Folder | Contents |
 |---|---|
 | `research/01_market_competitor_research.md` | Existing products, pricing, users, unmet problems, positioning |
+| `research/04_external_datasets.md` | 11 external datasets: found, downloaded, analysed, used (2026-10-23) |
 | `research/03_dataset_selection.md` | Dataset candidates and decision |
 | `research/02_feasibility_and_challenges.md` | Can we do it? Technical, business, legal, project risks, go/no-go gates |
 | `plan/03_product_and_architecture_plan.md` | SaaS product definition, architecture, Hadoop/Mongo split, data model |

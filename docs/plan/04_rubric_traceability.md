@@ -15,9 +15,9 @@ Status: `DONE` (built + evidence) · `DONE-LOCAL` (built and tested locally; clo
 ## Big Data Tools & Techniques (23DC2044) — 30 project (+10 cert: user)
 | Criterion | Implementation | Evidence | Status |
 |---|---|---|---|
-| Dataset & MapReduce (10) | Amazon Reviews 2023 grocery (14.3 M reviews, 603 K products) + Store Sales (3.0 M rows); **10 Hadoop MapReduce jobs** (incl. reduce-side join, map-side join, chained jobs, combiners, counters as cleaning log) | `evidence/hadoop/`, `hadoop/streaming/`, `data/clean/mr/` | DONE |
+| Dataset & MapReduce (10) | Amazon Reviews 2023 grocery (14.3 M reviews, 603 K products) + Store Sales (3.0 M rows); **10 + 13 Hadoop MapReduce job runs** over 11 datasets (reduce-side & map-side joins, Apriori-style 3-job chain, chained jobs, combiners, counters as cleaning log, 46.8 M-point demand classification) | `evidence/hadoop/`, `hadoop/streaming/`, `data/clean/mr/` | DONE |
 | NoSQL integration (5) | MongoDB: bulk insert 603 K + 2.0 M + results; indexes; CRUD via API; GridFS; replica set | `evidence/mongo/*.json`, backend tests | DONE |
-| Result (10) | Independent recomputation 12/12 PASS; sample representativeness; insights (words, price bands, brands, promo, weekday) shown in UI | `evidence/validation/` | DONE |
+| Result (10) | Independent recomputation 12/12 + 12/12 PASS (core + external); sample representativeness; insights (words, price bands, brands, promo, weekday) shown in UI | `evidence/validation/` | DONE |
 | Report (5) + PPT 7–10 slides | Outline + all numbers ready | `docs/report/EVIDENCE_SUMMARY.md` | PENDING (user asks) |
 
 ## Cloud Computing for Data Analytics (23DC2043) — 25 project (+15 cert: user)

@@ -87,6 +87,16 @@ def wape_rows(actual, pred):
     return np.where(a > 0, e / np.maximum(a, 1e-9), np.where(e > 0, 1.0 + e, 0.0))
 
 
+def guarded_choice(w, models, margin=0.10):
+    """Pick the global learning model unless another method beats it by > `margin` (relative) on the selection window.
+    Evidence: choosing the per-item minimum of a 28-day window was worse than always using GBM on two real datasets
+    (Favorita 0.148 vs 0.142 WAPE, M5 0.675 vs 0.660) because the per-item minimum over-fits noise."""
+    g = models.index("gbm"); others = [i for i in range(len(models)) if i != g]
+    best_o = np.array(others)[np.argmin(w[others], axis=0)]
+    gain = w[g] - w[best_o, np.arange(w.shape[1])]
+    return np.where(gain > margin * np.maximum(w[g], 1e-9), best_o, g)
+
+
 # ---------------------------------------------------------------- pipeline
 def run(tenant, asof=None):
     t0 = time.time(); db = MongoClient(URI)[DBN]; run_id = uuid.uuid4().hex[:12]
@@ -124,7 +134,7 @@ def run(tenant, asof=None):
             ft = window(Y, cats, dates, nd - 1 - H, elig_full)             # window T (honest score)
             act_v, act_t = Y[:, nd - 2 * H: nd - H], Y[:, nd - H:]
             wv = np.vstack([wape_rows(act_v, fv[m]) for m in models]); wt = np.vstack([wape_rows(act_t, ft[m]) for m in models])
-            sel_v = np.argmin(wv, axis=0)                                  # chosen on V
+            sel_v = guarded_choice(wv, models)                             # chosen on V (guarded, see guarded_choice)
             pred_sel_t = np.array([ft[models[b]][i] for i, b in enumerate(sel_v)])
             sigma = np.sqrt(((pred_sel_t - act_t) ** 2).mean(axis=1))
             e = elig_full
@@ -133,7 +143,7 @@ def run(tenant, asof=None):
             summary["wape_baseline"].append(float(np.abs(ft["seasonal_avg4"][e] - act_t[e]).sum() / max(a_sum, 1)))
             summary["cov"].append(float((np.abs(pred_sel_t[e] - act_t[e]) <= 1.28 * sigma[e, None]).mean()))
             summary["act"].append(float(a_sum))
-            best_t = np.argmin(wv + wt, axis=0)                            # final choice on V+T
+            best_t = guarded_choice(wv + wt, models)                       # final choice on V+T
             ffin = window(Y, cats, dates, nd - 1, elig_full)
             wsel = wt[sel_v, np.arange(len(skus))]
         else:

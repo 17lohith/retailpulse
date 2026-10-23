@@ -1,0 +1,27 @@
+X1_item_support exit=0 elapsed=58s rows=1900
+HDFS: Number of bytes read=577567715;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=7;Launched reduce tasks=2;Map input records=32434490;Reduce output records=1900;CPU time spent (ms)=203210;Cleaning;
+X1b_frequent_baskets exit=0 elapsed=51s rows=2750476
+HDFS: Number of bytes read=577567715;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=5;Launched reduce tasks=6;Map input records=32434490;Reduce output records=2750476;CPU time spent (ms)=200540;
+X1c_pair_counts exit=0 elapsed=118s rows=57160
+HDFS: Number of bytes read=142138254;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=6;Launched reduce tasks=4;Map input records=2750476;Reduce output records=57160;CPU time spent (ms)=527100;
+X2_reorder_by_department exit=0 elapsed=76s rows=155
+HDFS: Number of bytes read=577567715;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=8;Launched reduce tasks=1;Map input records=32434490;Reduce output records=155;CPU time spent (ms)=296680;
+X3_order_timing exit=0 elapsed=30s rows=199
+HDFS: Number of bytes read=108972961;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=3421084;Reduce output records=199;CPU time spent (ms)=18860;
+X4_discount_depth exit=0 elapsed=31s rows=376
+HDFS: Number of bytes read=141746682;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=2;Map input records=2595733;Reduce output records=376;CPU time spent (ms)=15550;Cleaning;
+X4b_basket_sizes exit=0 elapsed=30s rows=276484
+HDFS: Number of bytes read=141746682;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=4;Map input records=2595733;Reduce output records=276484;CPU time spent (ms)=29670;
+X4c_basket_size_histogram exit=0 elapsed=24s rows=6
+HDFS: Number of bytes read=5612035;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=4;Launched reduce tasks=1;Map input records=276484;Reduce output records=6;CPU time spent (ms)=10490;
+X5_online_retail exit=0 elapsed=46s rows=4977
+HDFS: Number of bytes read=94854534;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=1067372;Reduce output records=4977;CPU time spent (ms)=21450;Cleaning;
+X6_m5_demand_classes exit=0 elapsed=83s rows=30490
+HDFS: Number of bytes read=1487768085;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=12;Launched reduce tasks=4;Map input records=46796220;Reduce output records=30490;CPU time spent (ms)=274210;
+X6b_class_by_department exit=0 elapsed=21s rows=12
+HDFS: Number of bytes read=2013367;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=4;Launched reduce tasks=1;Map input records=30490;Reduce output records=12;CPU time spent (ms)=7730;
+X7_supermarket_waste exit=0 elapsed=21s rows=52
+HDFS: Number of bytes read=18857057;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=1;Map input records=100001;Reduce output records=52;CPU time spent (ms)=6790;Cleaning;
+X8_price_drift exit=0 elapsed=23s rows=17506
+HDFS: Number of bytes read=21944578;HDFS: Number of bytes read erasure-coded=0;Launched map tasks=2;Launched reduce tasks=2;Map input records=120361;Reduce output records=17506;CPU time spent (ms)=11480;
+ALL_DONE

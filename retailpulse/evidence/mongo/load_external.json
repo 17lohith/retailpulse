@@ -1,0 +1,15 @@
+{
+ "X1_item_support": 1900,
+ "X1c_pair_counts": 57160,
+ "X2_reorder_by_department": 155,
+ "X3_order_timing": 199,
+ "X4_discount_depth": 376,
+ "X4c_basket_size_histogram": 6,
+ "X5_online_retail": 4977,
+ "X6b_class_by_department": 12,
+ "X7_supermarket_waste": 52,
+ "X8_price_drift": 17506,
+ "ext_instacart_products": 49688,
+ "ext_retail_desc": 4950,
+ "ext_m5_classes": 30490
+}

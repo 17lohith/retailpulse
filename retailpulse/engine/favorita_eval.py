@@ -12,6 +12,7 @@ import numpy as np, pandas as pd
 from joblib import Parallel, delayed
 from sklearn.ensemble import HistGradientBoostingRegressor
 warnings.filterwarnings("ignore")
+sys.path.insert(0, str(pathlib.Path(__file__).parent)); import pipeline as _P
 ROOT = pathlib.Path(__file__).resolve().parents[1]; RAW = ROOT / "data/raw/store_sales"
 OUT = ROOT / "evidence/forecast"; OUT.mkdir(parents=True, exist_ok=True)
 H = 28; T0 = time.time()
@@ -109,6 +110,8 @@ wv = {m: np.abs(fv[m] - act_v).sum(axis=1) for m in models}
 best = np.argmin(np.vstack([wv[m] for m in models]), axis=0)
 sel = np.array([ft[models[b]][i] for i, b in enumerate(best)])
 res["selector"] = metrics(act_t, sel, Yv[:, : nd - H])
+best_g = _P.guarded_choice(np.vstack([wv[m] for m in models]), models)          # guarded rule (added AFTER the M5 result; this run checks it on an independent dataset)
+sel_g = np.array([ft[models[b]][i] for i, b in enumerate(best_g)]); res["selector_guarded"] = metrics(act_t, sel_g, Yv[:, : nd - H])
 # per family WAPE (test) for baseline snaive7 vs best global model
 fam = np.array([s[1] for s in series]); per_family = {}
 for f in sorted(set(fam)):

@@ -1,0 +1,137 @@
+{
+  "generated": "2026-10-23T05:11:28.560686+00:00",
+  "runtime_s": 110,
+  "all_pass": true,
+  "results": [
+    {
+      "check": "X1 item support >= 3000 (Instacart)",
+      "keys_hadoop": 1900,
+      "keys_independent": 1900,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X1b baskets with >= 2 frequent items",
+      "keys_hadoop": 1,
+      "keys_independent": 1,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X1c frequent pair counts >= 300",
+      "keys_hadoop": 57160,
+      "keys_independent": 57160,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X2 reorder rate by department & aisle (map-side join)",
+      "keys_hadoop": 155,
+      "keys_independent": 155,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X3 order timing (weekday x hour, recency)",
+      "keys_hadoop": 199,
+      "keys_independent": 199,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X4 discount depth by dept x quarter x brand type (map-side join)",
+      "keys_hadoop": 376,
+      "keys_independent": 376,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 7.275957614183426e-12,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X4b/X4c basket size histogram",
+      "keys_hadoop": 6,
+      "keys_independent": 6,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 2.3283064365386963e-10,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X5 online retail: monthly revenue / returns / country / product",
+      "keys_hadoop": 4977,
+      "keys_independent": 4977,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 6.9998204708099365e-06,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X6 M5 demand class per series (30,490)",
+      "keys_hadoop": 30490,
+      "keys_independent": 30490,
+      "mismatches": 0,
+      "max_abs_diff": 5.000000000143778e-07,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X6b series count by department x class",
+      "keys_hadoop": 12,
+      "keys_independent": 12,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X7 waste by category x store (dirty case normalised)",
+      "keys_hadoop": 52,
+      "keys_independent": 52,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 0.0,
+      "status": "PASS",
+      "examples": []
+    },
+    {
+      "check": "X8 price drift across 12 monthly scrapes",
+      "keys_hadoop": 17506,
+      "keys_independent": 17506,
+      "only_in_independent": 0,
+      "only_in_hadoop": 0,
+      "mismatches": 0,
+      "max_abs_diff": 8.881784197001252e-16,
+      "status": "PASS",
+      "examples": []
+    }
+  ]
+}

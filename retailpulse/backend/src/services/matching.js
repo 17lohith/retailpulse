@@ -1,5 +1,7 @@
 import { Product } from '../models/index.js';
 import { norm } from './mapping.js';
+/** Key for an item we could not match: the item code when the file has one (same code, different descriptions = one item), else the normalised name. */
+export const unmatchedKey = (name, code) => (code ? 'code:' + norm(code) : 'raw:' + normName(name));
 
 const STOPWORDS = new Set(['the', 'of', 'and', 'with', 'pack', 'pcs', 'pc', 'nos']);
 export const normName = (s) => String(s ?? '').toLowerCase().replace(/([0-9])([a-z])/g, '$1 $2').replace(/([a-z])([0-9])/g, '$1 $2').replace(/[^a-z0-9]+/g, ' ').trim().replace(/\s+/g, ' ');   // '500ml' == '500 ml'

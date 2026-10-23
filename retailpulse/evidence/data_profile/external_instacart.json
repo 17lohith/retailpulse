@@ -1,0 +1,23 @@
+{
+ "license": null,
+ "orders": 3421083,
+ "users": 206209,
+ "eval_sets": {
+  "prior": 3214874,
+  "train": 131209,
+  "test": 75000
+ },
+ "products": 49688,
+ "prior_order_product_rows": 32434489,
+ "avg_basket": 10.088883421247614,
+ "orders_by_dow": {
+  "0": 600905,
+  "1": 587478,
+  "2": 467260,
+  "3": 436972,
+  "4": 426339,
+  "5": 453368,
+  "6": 448761
+ },
+ "days_since_prior_nulls": 206209
+}

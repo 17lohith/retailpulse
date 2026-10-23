@@ -1,0 +1,73 @@
+{
+  "dataset": "M5 (Walmart) FOODS x CA_1,TX_1,WI_1 - real SKU-level daily sales",
+  "series": 4311,
+  "eligible": 4303,
+  "horizon": 28,
+  "test_window": [
+    "2016-04-25",
+    "2016-05-22"
+  ],
+  "metrics": {
+    "seasonal_avg4": {
+      "WAPE": 0.7047597765922546,
+      "MAE": 1.3577114343643188
+    },
+    "ma28": {
+      "WAPE": 0.6871992349624634,
+      "MAE": 1.3238811492919922
+    },
+    "croston_sba": {
+      "WAPE": 0.695474710938678,
+      "MAE": 1.3398237992653586
+    },
+    "gbm": {
+      "WAPE": 0.6598668631753303,
+      "MAE": 1.2712257019893851
+    },
+    "selected": {
+      "WAPE": 0.6596390964755359,
+      "MAE": 1.270786912137986
+    },
+    "selected_plain_argmin": {
+      "WAPE": 0.6747014997388786,
+      "MAE": 1.2998044537522895
+    }
+  },
+  "best_model": "selected",
+  "baseline": "seasonal_avg4",
+  "improvement_vs_baseline_pct": 6.4022779981701134,
+  "coverage80": 0.8440124829852926,
+  "by_demand_class": {
+    "erratic": {
+      "series": 95,
+      "units": 16570.0,
+      "selected": 0.5174033098117645,
+      "baseline": 0.5525346994400024
+    },
+    "intermittent": {
+      "series": 2845,
+      "units": 109467.0,
+      "selected": 0.7331485476859689,
+      "baseline": 0.7792348265647888
+    },
+    "lumpy": {
+      "series": 1151,
+      "units": 61190.0,
+      "selected": 0.7749289447216398,
+      "baseline": 0.8425559997558594
+    },
+    "smooth": {
+      "series": 212,
+      "units": 44884.0,
+      "selected": 0.37569386154075113,
+      "baseline": 0.3914646506309509
+    }
+  },
+  "selector_choice": {
+    "seasonal_avg4": 585,
+    "ma28": 176,
+    "croston_sba": 219,
+    "gbm": 3323
+  },
+  "runtime_s": 146
+}

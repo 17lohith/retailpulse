@@ -15,7 +15,7 @@ export const Trend = ({ data, x = 'date', y, name = 'Value', color = COLORS.prim
       <XAxis dataKey={x} tickFormatter={xfmt} tick={axis} tickLine={false} axisLine={false} minTickGap={28} />
       <YAxis tick={axis} tickLine={false} axisLine={false} width={62} tickFormatter={fmt} />
       <Tooltip content={<Tip fmt={fmt} labelFmt={xfmt} />} />
-      <Area type="monotone" dataKey={y} name={name} stroke={color} strokeWidth={2.2} fill={`url(#g${y})`} dot={false} />
+      <Area isAnimationActive={false} type="monotone" dataKey={y} name={name} stroke={color} strokeWidth={2.2} fill={`url(#g${y})`} dot={false} />
     </AreaChart>
   </ResponsiveContainer>
 );
@@ -27,7 +27,7 @@ export const Lines = ({ data, x, lines, h = 280, fmt = num, xfmt = (v) => v }) =
       <XAxis dataKey={x} tickFormatter={xfmt} tick={axis} tickLine={false} axisLine={false} minTickGap={32} />
       <YAxis tick={axis} tickLine={false} axisLine={false} width={64} tickFormatter={fmt} />
       <Tooltip content={<Tip fmt={fmt} labelFmt={xfmt} />} /><Legend iconType="plainline" wrapperStyle={{ fontSize: 12 }} />
-      {lines.map((l, i) => <Line key={l.key} type="monotone" dataKey={l.key} name={l.name || l.key} stroke={l.color || SERIES[i % SERIES.length]} strokeWidth={2} dot={false} />)}
+      {lines.map((l, i) => <Line isAnimationActive={false} key={l.key} type="monotone" dataKey={l.key} name={l.name || l.key} stroke={l.color || SERIES[i % SERIES.length]} strokeWidth={2} dot={false} />)}
     </LineChart>
   </ResponsiveContainer>
 );
@@ -40,7 +40,7 @@ export const RankBars = ({ data, value = 'value', label = 'label', color = COLOR
       <XAxis type="number" tick={axis} tickLine={false} axisLine={false} tickFormatter={fmt} domain={domain || [0, 'auto']} allowDataOverflow />
       <YAxis type="category" dataKey={label} width={130} tick={{ ...axis, fill: '#334155' }} tickLine={false} axisLine={false} interval={0} />
       <Tooltip content={<Tip fmt={fmt} />} cursor={{ fill: '#f1f5f9' }} />
-      <Bar dataKey={value} name="Value" radius={[0, 6, 6, 0]} barSize={18}>{data.map((d, i) => <Cell key={i} fill={colorBy ? colorBy(d) : color} />)}</Bar>
+      <Bar isAnimationActive={false} dataKey={value} name="Value" radius={[0, 6, 6, 0]} barSize={18}>{data.map((d, i) => <Cell key={i} fill={colorBy ? colorBy(d) : color} />)}</Bar>
     </BarChart>
   </ResponsiveContainer>
 );
@@ -51,7 +51,7 @@ export const Columns = ({ data, x, bars, h = 240, fmt = num, stacked, domain }) 
       <XAxis dataKey={x} tick={axis} tickLine={false} axisLine={false} interval={0} />
       <YAxis tick={axis} tickLine={false} axisLine={false} width={56} tickFormatter={fmt} domain={domain || [0, 'auto']} allowDataOverflow />
       <Tooltip content={<Tip fmt={fmt} />} cursor={{ fill: '#f1f5f9' }} />{bars.length > 1 && <Legend wrapperStyle={{ fontSize: 12 }} />}
-      {bars.map((b, i) => <Bar key={b.key} dataKey={b.key} name={b.name || b.key} fill={b.color || SERIES[i]} radius={[6, 6, 0, 0]} stackId={stacked ? 's' : undefined} />)}
+      {bars.map((b, i) => <Bar isAnimationActive={false} key={b.key} dataKey={b.key} name={b.name || b.key} fill={b.color || SERIES[i]} radius={[6, 6, 0, 0]} stackId={stacked ? 's' : undefined} />)}
     </BarChart>
   </ResponsiveContainer>
 );
@@ -67,9 +67,9 @@ export const ForecastChart = ({ history, forecast, h = 280 }) => {
         <XAxis dataKey="date" tickFormatter={dshort} tick={axis} tickLine={false} axisLine={false} minTickGap={30} />
         <YAxis tick={axis} tickLine={false} axisLine={false} width={40} />
         <Tooltip content={<Tip labelFmt={dshort} />} /><Legend wrapperStyle={{ fontSize: 12 }} />
-        <Area dataKey="range" name="Likely range (80%)" stroke="none" fill={COLORS.accent} fillOpacity={0.22} />
-        <Line type="monotone" dataKey="actual" name="Sold" stroke={COLORS.primary} strokeWidth={2} dot={false} connectNulls />
-        <Line type="monotone" dataKey="forecast" name="Expected" stroke={COLORS.accent} strokeWidth={2.4} strokeDasharray="5 4" dot={false} />
+        <Area isAnimationActive={false} dataKey="range" name="Likely range (80%)" stroke="none" fill={COLORS.accent} fillOpacity={0.22} />
+        <Line isAnimationActive={false} type="monotone" dataKey="actual" name="Sold" stroke={COLORS.primary} strokeWidth={2} dot={false} connectNulls />
+        <Line isAnimationActive={false} type="monotone" dataKey="forecast" name="Expected" stroke={COLORS.accent} strokeWidth={2.4} strokeDasharray="5 4" dot={false} />
         {split && <ReferenceLine x={split} stroke="#94a3b8" strokeDasharray="3 3" label={{ value: 'Today', fontSize: 11, fill: '#64748b', position: 'insideTopRight' }} />}
       </ComposedChart>
     </ResponsiveContainer>

@@ -12,7 +12,7 @@ usage: python simulation/generate.py demo-a|demo-b [--seed 42]
 import argparse, collections, datetime as dt, json, math, pathlib, sys, time
 import numpy as np, pandas as pd
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from catalog import FAMILIES, SUPPLIERS, build_catalog
+from catalog import FAMILIES, FAMILIES_BB, SUPPLIERS, build_catalog, build_catalog_bigbasket
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 RAW = ROOT / "data/raw"
@@ -22,15 +22,17 @@ SHIFT_DAYS = 3290                       # 470 whole weeks: weekday pattern prese
 TENANTS = {
     "demo-a": dict(name="Sri Lakshmi Provision Store", kind="single-owner store", stores=1, target_units=1200, sku_factor=0.5, seed_off=1),
     "demo-b": dict(name="GreenMart Supermarkets", kind="3-store small chain", stores=3, target_units=3500, sku_factor=1.0, seed_off=2),
+    # Indian-catalogue shop: real BigBasket products with native INR prices (see research/04_external_datasets.md)
+    "demo-c": dict(name="Annapurna Fresh & Provisions", kind="single supermarket (Indian catalogue)", stores=1, target_units=2000, sku_factor=0.9, seed_off=3, catalog="bigbasket"),
 }
 
 
 def shifted(ts): return (pd.Timestamp(ts) + pd.Timedelta(days=SHIFT_DAYS)).strftime("%Y-%m-%d")
 
 
-def load_real():
+def load_real(fams=FAMILIES):
     tr = pd.read_csv(RAW / "store_sales/train.csv", parse_dates=["date"])
-    tr = tr[(tr.date >= START) & (tr.date <= END) & (tr.family.isin(FAMILIES))]
+    tr = tr[(tr.date >= START) & (tr.date <= END) & (tr.family.isin(fams))]
     st = pd.read_csv(RAW / "store_sales/stores.csv")
     return tr, st
 
@@ -196,20 +198,24 @@ def main():
     a = ap.parse_args(); cfg = TENANTS[a.tenant]
     t0 = time.time()
     out = ROOT / "data/clean/sim" / a.tenant; (out / "exports").mkdir(parents=True, exist_ok=True)
-    tr, st = load_real()
+    fams = FAMILIES_BB if cfg.get("catalog") == "bigbasket" else FAMILIES
+    tr, st = load_real(fams)
     stores = pick_stores(tr, st, cfg["stores"], a.seed)
     n_days = (END - START).days + 1
     asof_idx = n_days - 1 - HOLDOUT_DAYS
     dates = pd.date_range(START, END)
-    nfam = {f: max(2, int(round(v[4] * cfg["sku_factor"]))) for f, v in FAMILIES.items()}
-    prods = build_catalog(RAW / "amazon2023/meta_Grocery_and_Gourmet_Food.jsonl", nfam, a.seed + cfg["seed_off"], a.tenant)
+    nfam = {f: max(2, int(round(v[4] * cfg["sku_factor"]))) for f, v in fams.items()}
+    if cfg.get("catalog") == "bigbasket":
+        prods = build_catalog_bigbasket(RAW / "external/bigbasket-entire-product-list-28k-datapoints/BigBasket Products.csv", nfam, a.seed + cfg["seed_off"], a.tenant)
+    else:
+        prods = build_catalog(RAW / "amazon2023/meta_Grocery_and_Gourmet_Food.jsonl", nfam, a.seed + cfg["seed_off"], a.tenant)
     print(f"[{a.tenant}] stores={stores} products={len(prods)} ({time.time()-t0:.0f}s)")
     pv = tr.pivot_table(index=["store_nbr", "date"], columns="family", values="sales", aggfunc="sum")
     sales_rows, future_rows, truth_rows = [], [], []
     all_moves, all_receipts, all_pos, snaps, recon_all, stats = [], [], [], {}, {}, {}
     for si, sn in enumerate(stores):
         rng = np.random.default_rng(a.seed * 100 + cfg["seed_off"] * 10 + si)
-        real_fam = {f: pv.loc[sn][f].reindex(dates, fill_value=0).values.astype(float) for f in FAMILIES}
+        real_fam = {f: pv.loc[sn][f].reindex(dates, fill_value=0).values.astype(float) for f in fams}
         mean_units = sum(v.mean() for v in real_fam.values())
         scale = cfg["target_units"] / mean_units
         res = simulate_store(rng, prods, real_fam, scale, si, n_days, asof_idx, dates)
@@ -307,7 +313,7 @@ def main():
     card = dict(tenant=a.tenant, tenant_name=cfg["name"], kind=cfg["kind"], SIMULATED=True, seed=a.seed, real_stores_used=stores,
                 date_shift_days=SHIFT_DAYS, real_window=[str(START.date()), str(END.date())],
                 visible_through=shifted(dates[asof_idx]), hidden_future_days=HOLDOUT_DAYS, products=len(prods),
-                currency="INR", usd_to_inr_assumption=33.0, family_reconciliation_ok=recon_all, per_store=stats,
+                currency="INR", usd_to_inr_assumption=(None if cfg.get("catalog") == "bigbasket" else 33.0), catalog=cfg.get("catalog", "amazon_meta"), family_reconciliation_ok=recon_all, per_store=stats,
                 sales_rows_visible=len(sales), sales_rows_future=len(future), runtime_s=round(time.time() - t0, 1))
     (out / "sim_report.json").write_text(json.dumps(card, indent=2, default=str))
     (ROOT / "evidence/data_profile").mkdir(parents=True, exist_ok=True)

@@ -45,8 +45,11 @@ Demo shops (simulated; need `data/` regenerated, see below): `owner@demo-a.retai
 4. `python loaders/load_amazon_meta.py` · `load_reviews_sample.py 0.14` · `load_sim.py demo-a` · `load_mr_results.py`
 5. `python engine/pipeline.py demo-a` · `python engine/favorita_eval.py`
 
+## External research datasets (Hadoop demo)
+Eleven further datasets were reviewed (Instacart, Dunnhumby, Online Retail II, M5, Real Canadian Superstore, BigBasket, synthetic inventory sets…); eight are processed by 13 extra Hadoop jobs (`hadoop/scripts/run_ext.sh`, validated by `validation/validate_external.py`). See `docs/research/04_external_datasets.md`. Prepare with `python data_prep/prepare_external.py`, load with `python loaders/load_external.py`. Demo shops: A (single store), B (3-store chain), **C (Indian catalogue, ₹)**.
+
 ## Tests
-`cd retailpulse/backend && npm test` (45) · `cd retailpulse && pytest` (Hadoop job logic, engine incl. no-future-leakage, simulator checks, cloud ETL) · `node retailpulse/e2e/ingest_flow.mjs` (new-owner journey) · `node retailpulse/e2e/screenshots.mjs`.
+`cd retailpulse/backend && npm test` (47) · `cd retailpulse && pytest` (Hadoop job logic, engine incl. no-future-leakage, simulator checks, cloud ETL) · `node retailpulse/e2e/ingest_flow.mjs` (new-owner journey) · `node retailpulse/e2e/screenshots.mjs`.
 
 ## Where to look
 | | |
