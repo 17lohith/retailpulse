@@ -54,7 +54,7 @@ jobs:
           docker build -t rp-worker retailpulse/engine
       - name: Smoke test the compose stack
         working-directory: retailpulse/infra
-        env: { JWT_SECRET: ci-only-secret, WEB_PORT: "18080", API_PORT: "14000", MONGO_PORT: "37017" }
+        env: { JWT_SECRET: ci-only-secret-0123456789-abcdefghijklmnopqrstuvwxyz, WEB_PORT: "18080", API_PORT: "14000", MONGO_PORT: "37017" }
         run: |
           docker compose up -d --build
           for i in $(seq 1 40); do curl -sf localhost:18080/health && break; sleep 3; done
