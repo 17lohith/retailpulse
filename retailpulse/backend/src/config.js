@@ -14,6 +14,6 @@ export const config = {
   maxRowsPerFile: Number(env.MAX_ROWS || 2_000_000),
   corsOrigin: env.CORS_ORIGIN || 'http://localhost:5173',
 };
-if (config.env === 'production' && config.jwtSecret === 'dev-only-secret-change-me') {
-  throw new Error('JWT_SECRET must be set in production');
+if (config.env === 'production' && (config.jwtSecret === 'dev-only-secret-change-me' || /change-me/i.test(config.jwtSecret) || config.jwtSecret.length < 32)) {
+  throw new Error('JWT_SECRET must be a random value of at least 32 characters in production (openssl rand -hex 32)');
 }
