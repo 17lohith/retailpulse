@@ -22,7 +22,10 @@ export function createApp() {
   const app = express();
   app.disable('x-powered-by');
   app.use(helmet());
-  app.use(cors({ origin: config.corsOrigin.split(','), credentials: true }));
+  app.use(cors({
+    origin: (origin, callback) => callback(null, true),
+    credentials: true,
+  }));
   if (config.env !== 'test') app.use(pinoHttp({ logger: pino({ level: 'info' }) }));
   app.use(express.json({ limit: '2mb' }));
 
