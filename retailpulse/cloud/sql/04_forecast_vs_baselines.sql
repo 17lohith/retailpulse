@@ -11,11 +11,22 @@ CREATE OR REPLACE TABLE `${PROJECT}.retailpulse.forecast_baselines` AS
 WITH h AS (SELECT * FROM `${PROJECT}.retailpulse.v_series` WHERE series_id IN (SELECT series_id FROM `${PROJECT}.retailpulse.v_eligible_series`)),
 test AS (SELECT series_id, date, sales AS actual FROM h WHERE date > train_end),
 naive AS (SELECT series_id, ARRAY_AGG(sales ORDER BY date DESC LIMIT 1)[OFFSET(0)] AS v FROM h WHERE date <= train_end GROUP BY series_id),
-snaive AS (SELECT t.series_id, t.date, (SELECT sales FROM h WHERE h.series_id = t.series_id AND h.date = DATE_SUB(train_end, INTERVAL 6 - MOD(DATE_DIFF(t.date, train_end, DAY) - 1, 7) DAY)) AS v FROM test t),
-sa4 AS (SELECT t.series_id, t.date, (SELECT AVG(sales) FROM h WHERE h.series_id = t.series_id AND h.date <= train_end AND h.date > DATE_SUB(train_end, INTERVAL 28 DAY)
-          AND MOD(DATE_DIFF(h.date, train_end, DAY) - MOD(DATE_DIFF(t.date, train_end, DAY) - 1, 7) - 1, 7) = 0) AS v FROM test t)
+snaive AS (
+  SELECT series_id, EXTRACT(DAYOFWEEK FROM date) AS dow, sales AS v
+  FROM h
+  WHERE date BETWEEN DATE_SUB(train_end, INTERVAL 6 DAY) AND train_end
+),
+sa4 AS (
+  SELECT series_id, EXTRACT(DAYOFWEEK FROM date) AS dow, AVG(sales) AS v
+  FROM h
+  WHERE date BETWEEN DATE_SUB(train_end, INTERVAL 27 DAY) AND train_end
+  GROUP BY series_id, EXTRACT(DAYOFWEEK FROM date)
+)
 SELECT t.series_id, t.date, t.actual, n.v AS naive, s.v AS snaive7, a.v AS seasonal_avg4
-FROM test t JOIN naive n USING (series_id) JOIN snaive s USING (series_id, date) JOIN sa4 a USING (series_id, date);
+FROM test t
+JOIN naive n ON t.series_id = n.series_id
+JOIN snaive s ON t.series_id = s.series_id AND EXTRACT(DAYOFWEEK FROM t.date) = s.dow
+JOIN sa4 a ON t.series_id = a.series_id AND EXTRACT(DAYOFWEEK FROM t.date) = a.dow;
 
 CREATE OR REPLACE TABLE `${PROJECT}.retailpulse.metrics_comparison` AS
 WITH j AS (SELECT b.*, f.pred AS arima_plus FROM `${PROJECT}.retailpulse.forecast_baselines` b JOIN `${PROJECT}.retailpulse.forecast_arima` f USING (series_id, date))

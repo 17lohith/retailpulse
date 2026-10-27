@@ -1,5 +1,5 @@
 """Cloud Run function (Eventarc trigger: Cloud Storage 'object finalized'). Thin wrapper over etl.handle_event."""
-import json, logging
+import json, logging, os
 import functions_framework
 from etl import handle_event
 
@@ -13,9 +13,10 @@ class GcsStorage:
 
 
 class Bq:
-    def __init__(self, dataset="retailpulse"):
+    def __init__(self, dataset=None):
         from google.cloud import bigquery
-        self.bq, self.dataset, self.mod = bigquery.Client(), dataset, bigquery
+        self.dataset = dataset or os.environ.get("BQ_DATASET", "retailpulse")
+        self.bq, self.mod = bigquery.Client(), bigquery
     def load_csv(self, uri, table):
         cfg = self.mod.LoadJobConfig(source_format=self.mod.SourceFormat.CSV, skip_leading_rows=1, write_disposition="WRITE_TRUNCATE", autodetect=False,
                                      schema=[self.mod.SchemaField("date", "DATE"), self.mod.SchemaField("store_nbr", "INT64"), self.mod.SchemaField("family", "STRING"), self.mod.SchemaField("sales", "FLOAT64"),
